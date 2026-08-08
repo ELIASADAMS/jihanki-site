@@ -1,0 +1,2124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="
+        width=device-width,
+        initial-scale=1.0,
+        maximum-scale=1.0,
+        user-scalable=no
+    "
+>
+
+<title>自販機 — JIHANKI</title>
+
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    background: #171717;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+}
+
+
+/* =========================================================
+   VIEWPORT
+
+   THE DESIGN CANVAS IS EXACTLY:
+
+       429 × 932
+
+   This is your Figma iPhone Pro Max composition.
+
+   The browser scales this entire canvas proportionally.
+========================================================= */
+
+#viewport {
+
+    position: fixed;
+
+    left: 50%;
+    top: 50%;
+
+    width: 429px;
+    height: 932px;
+
+    transform:
+        translate(-50%, -50%)
+        scale(var(--scale));
+
+    transform-origin:
+        center center;
+
+}
+
+
+/* =========================================================
+   JIHANKI IMAGE
+
+   Figma:
+
+   width  = 429
+   height = 786
+   left   = 0
+   top    = 73
+========================================================= */
+
+#jihanki {
+
+    position: absolute;
+
+    left: 0;
+    top: 73px;
+
+    width: 429px;
+    height: 786px;
+
+}
+
+
+#machine-image {
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 429px;
+    height: 786px;
+
+    display: block;
+
+    user-select: none;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   SCREEN
+
+   YOUR FIGMA:
+
+   left   = 98
+   top    = 151
+   width  = 238
+   height = 177
+
+   NOTE:
+   These coordinates are relative to the 429×932
+   viewport, NOT relative to the PNG.
+
+========================================================= */
+
+#screen {
+
+    position: absolute;
+
+    left: 98px;
+    top: 151px;
+
+    width: 238px;
+    height: 177px;
+
+    overflow: hidden;
+
+    /*
+       The physical CRT remains visible underneath.
+
+       This is intentionally NOT opaque.
+    */
+
+    background:
+        rgba(0, 0, 0, 0.42);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+
+        inset 0 0 30px
+        rgba(0,0,0,.8),
+
+        0 0 10px
+        rgba(0,0,0,.65);
+
+    z-index: 10;
+
+}
+
+
+/* =========================================================
+   CRT SCANLINES
+========================================================= */
+
+#screen::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 30;
+
+    background:
+
+        repeating-linear-gradient(
+            0deg,
+
+            transparent 0px,
+
+            transparent 2px,
+
+            rgba(255,255,255,.035) 3px
+        );
+
+}
+
+
+/* =========================================================
+   CRT REFLECTION
+========================================================= */
+
+#screen::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 31;
+
+    background:
+
+        linear-gradient(
+            110deg,
+
+            rgba(255,255,255,.035),
+
+            transparent 35%
+        );
+
+}
+
+
+/* =========================================================
+   SCREEN CONTENT
+========================================================= */
+
+#screen-content {
+
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 20;
+
+    overflow: hidden;
+
+}
+
+
+/* =========================================================
+   STARTUP SCREEN
+========================================================= */
+
+.boot {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    color:
+        rgba(220,220,220,.82);
+
+    animation:
+        boot-flicker 5s infinite;
+
+}
+
+
+/* Japanese title */
+
+.boot-japanese {
+
+    font-family:
+
+        "Yu Mincho",
+        "Hiragino Mincho ProN",
+        serif;
+
+    font-size: 27px;
+
+    letter-spacing:
+        .28em;
+
+    margin-left:
+        .28em;
+
+    text-shadow:
+
+        0 0 7px
+        rgba(220,220,220,.18);
+
+}
+
+
+/* JIHANKI */
+
+.boot-title {
+
+    margin-top: 4px;
+
+    font-size: 16px;
+
+    letter-spacing:
+        .30em;
+
+    margin-left:
+        .30em;
+
+}
+
+
+/* MEMORY ARCHIVE */
+
+.boot-subtitle {
+
+    margin-top: 5px;
+
+    font-size: 7px;
+
+    letter-spacing:
+        .28em;
+
+    margin-left:
+        .28em;
+
+    opacity: .42;
+
+}
+
+
+/* SELECT A MEMORY */
+
+.boot-loading {
+
+    margin-top: 25px;
+
+    font-size: 7px;
+
+    letter-spacing:
+        .15em;
+
+    opacity: .3;
+
+    animation:
+        loading-blink 1.6s infinite;
+
+}
+
+
+/* =========================================================
+   FLICKER
+========================================================= */
+
+@keyframes boot-flicker {
+
+    0%,
+    90%,
+    100% {
+
+        opacity: 1;
+
+    }
+
+    91% {
+
+        opacity: .72;
+
+    }
+
+    92% {
+
+        opacity: 1;
+
+    }
+
+    95% {
+
+        opacity: .88;
+
+    }
+
+}
+
+
+/* =========================================================
+   BLINKING "SELECT A MEMORY"
+========================================================= */
+
+@keyframes loading-blink {
+
+    0%,
+    40% {
+
+        opacity: .12;
+
+    }
+
+    50% {
+
+        opacity: .55;
+
+    }
+
+    60%,
+    100% {
+
+        opacity: .25;
+
+    }
+
+}
+
+
+/* =========================================================
+   PRODUCTS
+
+   FIGMA:
+
+   Good 1:
+   x = 36
+   y = 373
+   w = 62
+   h = 85
+
+   Good 2:
+   x = 118
+
+   Good 3:
+   x = 193
+
+   Good 4:
+   x = 268
+
+========================================================= */
+
+#products {
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 429px;
+    height: 932px;
+
+    z-index: 50;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   PRODUCT BUTTON
+========================================================= */
+
+.product {
+
+    position: absolute;
+
+    width: 62px;
+    height: 85px;
+
+    padding: 0;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    background:
+        rgba(3,3,3,.91);
+
+    color:
+        rgba(160,160,160,.72);
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 7px;
+
+    letter-spacing:
+        .10em;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    box-shadow:
+
+        inset 0 0 13px
+        rgba(0,0,0,.9),
+
+        0 2px 5px
+        rgba(0,0,0,.35);
+
+    transition:
+
+        background .15s ease,
+        color .15s ease,
+        transform .08s ease;
+
+}
+
+
+/* =========================================================
+   EXACT PRODUCT POSITIONS
+========================================================= */
+
+#video {
+
+    left: 36px;
+    top: 373px;
+
+}
+
+
+#photo {
+
+    left: 118px;
+    top: 373px;
+
+}
+
+
+#note {
+
+    left: 193px;
+    top: 373px;
+
+}
+
+
+#yokai {
+
+    left: 268px;
+    top: 373px;
+
+}
+
+
+/* =========================================================
+   PRODUCT LABEL
+========================================================= */
+
+.product-label {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    white-space: nowrap;
+
+}
+
+
+/* little indicator */
+
+.product::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 7px;
+    top: 50%;
+
+    width: 5px;
+    height: 5px;
+
+    transform:
+        translateY(-50%);
+
+    border-radius: 50%;
+
+    background:
+        rgba(150,150,150,.22);
+
+}
+
+
+/* =========================================================
+   PRODUCT HOVER
+========================================================= */
+
+.product:hover {
+
+    background:
+        rgba(8,8,8,.96);
+
+    color:
+        rgba(220,220,220,.9);
+
+}
+
+
+.product:hover::before {
+
+    background:
+        rgba(220,220,220,.85);
+
+    box-shadow:
+
+        0 0 7px
+        rgba(220,220,220,.7);
+
+}
+
+
+/* =========================================================
+   PRODUCT PRESS
+========================================================= */
+
+.product:active {
+
+    transform:
+        scale(.95);
+
+}
+
+
+/* =========================================================
+   MACHINE CONTROLS
+========================================================= */
+
+#controls {
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 429px;
+    height: 932px;
+
+    z-index: 60;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   COIN
+
+   FIGMA:
+
+   x = 357
+   y = 434
+   w = 49
+   h = 38
+========================================================= */
+
+#coin-button {
+
+    position: absolute;
+
+    left: 357px;
+    top: 434px;
+
+    width: 49px;
+    height: 38px;
+
+}
+
+
+/* =========================================================
+   HOME
+
+   FIGMA:
+
+   x = 357
+   y = 657
+   w = 49
+   h = 38
+========================================================= */
+
+#home-button {
+
+    position: absolute;
+
+    left: 357px;
+    top: 657px;
+
+    width: 49px;
+    height: 38px;
+
+}
+
+
+/* =========================================================
+   CONTROL STYLE
+========================================================= */
+
+.machine-control {
+
+    padding: 0;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    background:
+        rgba(3,3,3,.91);
+
+    color:
+        rgba(150,150,150,.65);
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 6px;
+
+    letter-spacing:
+        .10em;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    box-shadow:
+
+        inset 0 0 10px
+        rgba(0,0,0,.9);
+
+    transition:
+
+        background .15s,
+        color .15s,
+        transform .08s;
+
+}
+
+
+.machine-control:hover {
+
+    background:
+        rgba(10,10,10,.96);
+
+    color:
+        rgba(230,230,230,.9);
+
+}
+
+
+.machine-control:active {
+
+    transform:
+        scale(.94);
+
+}
+
+
+/* =========================================================
+   MEMORY / PICKUP
+
+   FIGMA:
+
+   x = 85
+   y = 717
+   w = 258
+   h = 80
+========================================================= */
+
+#memory-button {
+
+    position: absolute;
+
+    left: 85px;
+    top: 717px;
+
+    width: 258px;
+    height: 80px;
+
+    z-index: 60;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    background:
+        rgba(0,0,0,.88);
+
+    color:
+        rgba(150,150,150,.4);
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 7px;
+
+    letter-spacing:
+        .14em;
+
+    cursor: pointer;
+
+    box-shadow:
+
+        inset 0 0 18px
+        rgba(0,0,0,.95);
+
+    transition:
+
+        color .2s,
+        background .2s;
+
+}
+
+
+#memory-button:hover {
+
+    background:
+        rgba(5,5,5,.96);
+
+    color:
+        rgba(220,220,220,.7);
+
+}
+
+
+#memory-button:active {
+
+    transform:
+        scale(.98);
+
+}
+
+
+/* =========================================================
+   ARCHIVE SCREEN
+========================================================= */
+
+.archive {
+
+    width: 100%;
+    height: 100%;
+
+    padding: 12px;
+
+    overflow-y: auto;
+
+    scrollbar-width: none;
+
+}
+
+
+.archive::-webkit-scrollbar {
+
+    display: none;
+
+}
+
+
+.archive-header {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    margin-bottom: 10px;
+
+    padding-bottom: 5px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.08);
+
+}
+
+
+.archive-title {
+
+    font-size: 8px;
+
+    letter-spacing:
+        .15em;
+
+}
+
+
+.archive-status {
+
+    font-size: 6px;
+
+    opacity: .35;
+
+}
+
+
+.archive-item {
+
+    display: block;
+
+    width: 100%;
+
+    margin-bottom: 5px;
+
+    padding: 7px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+
+    background:
+        rgba(0,0,0,.35);
+
+    color:
+        rgba(190,190,190,.65);
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 7px;
+
+    text-align: left;
+
+    cursor: pointer;
+
+}
+
+
+.archive-item:hover {
+
+    background:
+        rgba(255,255,255,.05);
+
+    color:
+        #ddd;
+
+}
+
+
+.archive-item small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    opacity: .35;
+
+    font-size: 5px;
+
+}
+
+
+/* =========================================================
+   FULLSCREEN MEMORY
+========================================================= */
+
+#artifact {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: none;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background:
+        rgba(0,0,0,.92);
+
+    padding: 20px;
+
+}
+
+
+#artifact.active {
+
+    display: flex;
+
+}
+
+
+#artifact-content {
+
+    width:
+        min(90vw, 500px);
+
+    max-height:
+        80vh;
+
+    overflow-y: auto;
+
+    padding: 22px;
+
+    background:
+        #080808;
+
+    border:
+        1px solid #333;
+
+    box-shadow:
+        0 20px 60px #000;
+
+    color:
+        #aaa;
+
+}
+
+
+#artifact-close {
+
+    position: fixed;
+
+    right: 18px;
+    top: 18px;
+
+    width: 40px;
+    height: 40px;
+
+    border:
+        1px solid #333;
+
+    background:
+        #050505;
+
+    color:
+        #aaa;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE SCALE
+
+   This is the important part.
+
+   We scale the COMPLETE 429×932 composition.
+
+   Nothing gets independently resized.
+   Nothing gets cropped.
+
+========================================================= */
+
+:root {
+
+    --scale: 1;
+
+}
+
+
+/* =========================================================
+   NARROW / NORMAL PHONES
+========================================================= */
+
+@media (max-width: 429px) {
+
+    :root {
+
+        --scale:
+            calc(100vw / 429);
+
+    }
+
+}
+
+
+/* =========================================================
+   SHORT SCREENS
+
+   Prevent vertical cropping.
+
+========================================================= */
+
+@media (min-width: 430px) {
+
+    @media (max-height: 932px) {
+
+        :root {
+
+            --scale:
+                calc(100dvh / 932);
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY WIDE / DESKTOP
+
+   Don't make the machine enormous.
+========================================================= */
+
+@media (min-width: 700px) {
+
+    :root {
+
+        --scale:
+            min(
+                1.15,
+                calc(100dvh / 932)
+            );
+
+    }
+
+}
+
+
+/* =========================================================
+   SAFE AREA
+
+   iPhone notch / Dynamic Island is handled by the
+   centered canvas rather than by moving individual
+   machine elements.
+========================================================= */
+
+@supports (padding: env(safe-area-inset-top)) {
+
+    #viewport {
+
+        /*
+           No additional positional adjustments.
+
+           The complete composition stays together.
+        */
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     COMPLETE 429 × 932 DESIGN CANVAS
+===================================================== -->
+
+<div id="viewport">
+
+
+    <!-- =================================================
+         JIHANKI PNG
+    ================================================== -->
+
+    <div id="jihanki">
+
+        <img
+            id="machine-image"
+            src="jihanki.png"
+            alt="JIHANKI"
+        >
+
+    </div>
+
+
+    <!-- =================================================
+         SCREEN
+    ================================================== -->
+
+    <div id="screen">
+
+        <div id="screen-content">
+
+            <div class="boot">
+
+                <div class="boot-japanese">
+                    自販機
+                </div>
+
+                <div class="boot-title">
+                    JIHANKI
+                </div>
+
+                <div class="boot-subtitle">
+                    MEMORY ARCHIVE
+                </div>
+
+                <div class="boot-loading">
+                    SELECT A MEMORY
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         PRODUCTS
+    ================================================== -->
+
+    <div id="products">
+
+
+        <button
+            id="video"
+            class="product"
+            data-type="videos"
+        >
+
+            <span class="product-label">
+                VIDEO
+            </span>
+
+        </button>
+
+
+        <button
+            id="photo"
+            class="product"
+            data-type="photos"
+        >
+
+            <span class="product-label">
+                PHOTO
+            </span>
+
+        </button>
+
+
+        <button
+            id="note"
+            class="product"
+            data-type="notes"
+        >
+
+            <span class="product-label">
+                NOTE
+            </span>
+
+        </button>
+
+
+        <button
+            id="yokai"
+            class="product"
+            data-type="yokai"
+        >
+
+            <span class="product-label">
+                妖怪
+            </span>
+
+        </button>
+
+
+    </div>
+
+
+    <!-- =================================================
+         HOME / COIN
+    ================================================== -->
+
+    <div id="controls">
+
+
+        <button
+            id="coin-button"
+            class="machine-control"
+        >
+            COIN
+        </button>
+
+
+        <button
+            id="home-button"
+            class="machine-control"
+        >
+            HOME
+        </button>
+
+
+        <button
+            id="memory-button"
+        >
+            INSERT COIN
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     MEMORY ARTIFACT
+===================================================== -->
+
+<div id="artifact">
+
+    <button id="artifact-close">
+        ×
+    </button>
+
+    <div id="artifact-content"></div>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const archive = {
+
+
+    videos: [
+
+        {
+            title:
+                "富士山六体妖怪",
+
+            date:
+                "2026",
+
+            text:
+                "A fictional documentary about six yokai said to inhabit the Fuji region."
+        },
+
+
+        {
+            title:
+                "UNO-MISAKI",
+
+            date:
+                "2026",
+
+            text:
+                "The tunnel is a recording device. The walls remember footsteps, coins, engines and voices."
+        }
+
+    ],
+
+
+    photos: [
+
+        {
+            title:
+                "SAIKO",
+
+            date:
+                "2026",
+
+            text:
+                "Lake Saiko. Field documentation."
+        },
+
+
+        {
+            title:
+                "AOKIGAHARA",
+
+            date:
+                "2026",
+
+            text:
+                "Forest memory archive."
+        },
+
+
+        {
+            title:
+                "UNO-MISAKI",
+
+            date:
+                "2026",
+
+            text:
+                "The tunnel archive."
+        }
+
+    ],
+
+
+    notes: [
+
+        {
+            title:
+                "FIRST JIHANKI",
+
+            date:
+                "2026.07.22",
+
+            text:
+                "A vending machine glowing alone at night."
+        },
+
+
+        {
+            title:
+                "ARCHIVE ROTATION",
+
+            date:
+                "2026",
+
+            text:
+                "At night, the archive is overwritten. The same place may contain several layers of time."
+        },
+
+
+        {
+            title:
+                "PIEZOELECTRIC MEMORY",
+
+            date:
+                "2026",
+
+            text:
+                "The walls behave like a recording device."
+        }
+
+    ],
+
+
+    yokai: [
+
+        {
+            title:
+                "上葉山",
+
+            date:
+                "FUJI REGION",
+
+            text:
+                "Archive entry."
+        },
+
+
+        {
+            title:
+                "水好鬼",
+
+            date:
+                "FUJI REGION",
+
+            text:
+                "Archive entry."
+        },
+
+
+        {
+            title:
+                "須賀山",
+
+            date:
+                "FUJI REGION",
+
+            text:
+                "Archive entry."
+        },
+
+
+        {
+            title:
+                "江花師",
+
+            date:
+                "FUJI REGION",
+
+            text:
+                "Archive entry."
+        },
+
+
+        {
+            title:
+                "下津賀",
+
+            date:
+                "FUJI REGION",
+
+            text:
+                "Archive entry."
+        },
+
+
+        {
+            title:
+                "保外神",
+
+            date:
+                "FUJI REGION",
+
+            text:
+                "Archive entry."
+        }
+
+    ]
+
+};
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const screenContent =
+    document.getElementById(
+        "screen-content"
+    );
+
+
+const products =
+    document.querySelectorAll(
+        ".product"
+    );
+
+
+const homeButton =
+    document.getElementById(
+        "home-button"
+    );
+
+
+const coinButton =
+    document.getElementById(
+        "coin-button"
+    );
+
+
+const memoryButton =
+    document.getElementById(
+        "memory-button"
+    );
+
+
+const artifact =
+    document.getElementById(
+        "artifact"
+    );
+
+
+const artifactContent =
+    document.getElementById(
+        "artifact-content"
+    );
+
+
+const artifactClose =
+    document.getElementById(
+        "artifact-close"
+    );
+
+
+/* =========================================================
+   HOME SCREEN
+========================================================= */
+
+function showHome() {
+
+    screenContent.innerHTML = `
+
+        <div class="boot">
+
+            <div class="boot-japanese">
+                自販機
+            </div>
+
+            <div class="boot-title">
+                JIHANKI
+            </div>
+
+            <div class="boot-subtitle">
+                MEMORY ARCHIVE
+            </div>
+
+            <div class="boot-loading">
+                SELECT A MEMORY
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   ARCHIVE HEADER
+========================================================= */
+
+function archiveHeader(title) {
+
+    return `
+
+        <div class="archive">
+
+            <div class="archive-header">
+
+                <span class="archive-title">
+                    ${title}
+                </span>
+
+                <span class="archive-status">
+                    ONLINE
+                </span>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   SHOW ARCHIVE
+========================================================= */
+
+function showArchive(type) {
+
+    const items =
+        archive[type];
+
+    screenContent.innerHTML =
+        archiveHeader(
+            type.toUpperCase()
+        );
+
+
+    const container =
+        screenContent.querySelector(
+            ".archive"
+        );
+
+
+    items.forEach(
+        (item, index) => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "archive-item";
+
+
+            button.innerHTML = `
+
+                ${String(index + 1).padStart(2, "0")}
+
+                &nbsp;&nbsp;
+
+                ${item.title}
+
+                <small>
+                    ${item.date}
+                </small>
+
+            `;
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    openArtifact(item);
+
+                }
+            );
+
+
+            container.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ARTIFACT
+========================================================= */
+
+function openArtifact(item) {
+
+    artifactContent.innerHTML = `
+
+        <div style="
+            font-size:12px;
+            letter-spacing:.15em;
+            margin-bottom:8px;
+        ">
+            ${item.title}
+        </div>
+
+
+        <div style="
+            font-size:7px;
+            opacity:.35;
+            margin-bottom:20px;
+        ">
+            ${item.date || ""}
+        </div>
+
+
+        <div style="
+            font-size:10px;
+            line-height:1.8;
+            white-space:pre-line;
+            opacity:.75;
+        ">
+            ${item.text || ""}
+        </div>
+
+    `;
+
+
+    artifact.classList.add(
+        "active"
+    );
+
+}
+
+
+/* =========================================================
+   PRODUCT BUTTONS
+========================================================= */
+
+products.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                showArchive(
+                    button.dataset.type
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+homeButton.addEventListener(
+    "click",
+    showHome
+);
+
+
+/* =========================================================
+   RANDOM MEMORY
+========================================================= */
+
+const randomMemories = [
+
+    {
+        title:
+            "MEMORY 001",
+
+        date:
+            "ARCHIVE",
+
+        text:
+            "A vending machine was standing alone beside the road.\n\nNo one was using it.\n\nIt was still illuminated."
+    },
+
+
+    {
+        title:
+            "MEMORY 002",
+
+        date:
+            "ARCHIVE",
+
+        text:
+            "The sound of coins belongs to another decade."
+    },
+
+
+    {
+        title:
+            "MEMORY 003",
+
+        date:
+            "UNO-MISAKI",
+
+        text:
+            "A bicycle passed through the tunnel.\n\nFor a moment it sounded like someone riding through 2005."
+    },
+
+
+    {
+        title:
+            "MEMORY 004",
+
+        date:
+            "ARCHIVE",
+
+        text:
+            "The machine remembers things that were never entered into its database."
+    },
+
+
+    {
+        title:
+            "MEMORY 005",
+
+        date:
+            "WARNING",
+
+        text:
+            "Do not stand on the white line."
+    }
+
+];
+
+
+/* =========================================================
+   DISPENSE MEMORY
+========================================================= */
+
+function dispenseMemory() {
+
+    const memory =
+        randomMemories[
+            Math.floor(
+                Math.random() *
+                randomMemories.length
+            )
+        ];
+
+
+    memoryButton.animate(
+
+        [
+            {
+                opacity: .4
+            },
+
+            {
+                opacity: 1
+            },
+
+            {
+                opacity: .4
+            }
+
+        ],
+
+        {
+            duration: 350,
+            iterations: 3
+        }
+
+    );
+
+
+    setTimeout(
+        () => {
+
+            openArtifact(
+                memory
+            );
+
+        },
+
+        500
+    );
+
+}
+
+
+/* =========================================================
+   COIN
+========================================================= */
+
+coinButton.addEventListener(
+    "click",
+    () => {
+
+        screenContent.innerHTML = `
+
+            <div class="boot">
+
+                <div
+                    class="boot-japanese"
+                    style="font-size:25px"
+                >
+                    …
+                </div>
+
+                <div class="boot-loading">
+                    READING MEMORY
+                </div>
+
+            </div>
+
+        `;
+
+
+        setTimeout(
+            dispenseMemory,
+            700
+        );
+
+    }
+);
+
+
+/* =========================================================
+   MEMORY BUTTON
+========================================================= */
+
+memoryButton.addEventListener(
+    "click",
+    dispenseMemory
+);
+
+
+/* =========================================================
+   CLOSE
+========================================================= */
+
+artifactClose.addEventListener(
+    "click",
+    () => {
+
+        artifact.classList.remove(
+            "active"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   CLICK OUTSIDE
+========================================================= */
+
+artifact.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target === artifact
+        ) {
+
+            artifact.classList.remove(
+                "active"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+showHome();
+
+
+/* =========================================================
+   RESPONSIVE SCALE ENGINE
+
+   This is deliberately JavaScript rather than relying
+   on several CSS media queries.
+
+   The whole 429×932 design is treated as one canvas.
+
+   Therefore:
+
+   iPhone 15 Pro Max
+       → approximately 1:1
+
+   iPhone smaller
+       → scales down
+
+   Android tall phone
+       → scales down if necessary
+
+   Landscape
+       → scales down
+
+   Desktop
+       → remains centered
+
+   NOTHING IS CROPPED.
+========================================================= */
+
+function resizeJihanki() {
+
+    const viewportWidth =
+        window.innerWidth;
+
+
+    const viewportHeight =
+        window.innerHeight;
+
+
+    const designWidth =
+        429;
+
+
+    const designHeight =
+        932;
+
+
+    const scaleX =
+        viewportWidth /
+        designWidth;
+
+
+    const scaleY =
+        viewportHeight /
+        designHeight;
+
+
+    /*
+       Always use the smaller dimension.
+
+       This is the crucial part that prevents
+       the PNG from being cropped.
+    */
+
+    let scale =
+        Math.min(
+            scaleX,
+            scaleY
+        );
+
+
+    /*
+       Don't make it absurdly large on desktop.
+    */
+
+    scale =
+        Math.min(
+            scale,
+            1.15
+        );
+
+
+    document.documentElement
+        .style
+        .setProperty(
+            "--scale",
+            scale
+        );
+
+}
+
+
+window.addEventListener(
+    "resize",
+    resizeJihanki
+);
+
+
+window.addEventListener(
+    "orientationchange",
+    () => {
+
+        setTimeout(
+            resizeJihanki,
+            100
+        );
+
+    }
+);
+
+
+resizeJihanki();
+
+</script>
+
+
+</body>
+
+</html>
