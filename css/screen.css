@@ -1,0 +1,47 @@
+/*
+    SCREEN TYPOGRAPHY PATCH
+
+    The screen itself remains at the original Figma coordinates.
+    Only typography/readability is increased.
+*/
+
+.machine-screen {
+    background: rgba(5, 5, 5, .10);
+    color: rgba(255, 255, 255, .84);
+    font-size: clamp(8px, 2.35vw, 12px);
+    line-height: 1.5;
+}
+
+#screen-content {
+    padding: 7%;
+}
+
+.boot-title {
+    font-size: 1.65em;
+    letter-spacing: .2em;
+}
+
+.boot-line {
+    margin-top: 10px;
+    font-size: .78em;
+    opacity: .55;
+}
+
+/* Archive entries become readable on a phone */
+
+.archive-item {
+    font-size: clamp(8px, 2.25vw, 11px);
+    padding: 7px 2px;
+}
+
+.archive-item small {
+    font-size: .72em;
+}
+
+.archive-title {
+    font-size: clamp(8px, 2.25vw, 11px);
+}
+
+.archive-status {
+    font-size: .72em;
+}

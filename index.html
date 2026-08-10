@@ -2,2122 +2,1251 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
 
-<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0, user-scalable=no,
+               viewport-fit=cover">
 
-<meta
-    name="viewport"
-    content="
-        width=device-width,
-        initial-scale=1.0,
-        maximum-scale=1.0,
-        user-scalable=no
-    "
->
+    <title>自販機 — JIHANKI</title>
 
-<title>自販機 — JIHANKI</title>
+    <style>
+        /* =========================================================
+   JIHANKI
+   Master coordinate system: 429 × 932
+   This is the Figma/iPhone Pro Max composition.
 
+   IMPORTANT:
+   The PNG itself starts at:
+       x = 0
+       y = 73
+       width = 429
+       height = 786
 
-<style>
-
-/* =========================================================
-   RESET
+   ALL interactive coordinates below remain VIEWPORT
+   coordinates, exactly as in Figma.
 ========================================================= */
 
-* {
-    box-sizing: border-box;
-
-    -webkit-tap-highlight-color: transparent;
-}
-
-html,
-body {
-
-    width: 100%;
-    height: 100%;
-
-    margin: 0;
-    padding: 0;
-
-    overflow: hidden;
-
-    background: #171717;
-
-    font-family:
-        "Courier New",
-        monospace;
-
-}
-
-
-/* =========================================================
-   VIEWPORT
-
-   THE DESIGN CANVAS IS EXACTLY:
-
-       429 × 932
-
-   This is your Figma iPhone Pro Max composition.
-
-   The browser scales this entire canvas proportionally.
-========================================================= */
-
-#viewport {
-
-    position: fixed;
-
-    left: 50%;
-    top: 50%;
-
-    width: 429px;
-    height: 932px;
-
-    transform:
-        translate(-50%, -50%)
-        scale(var(--scale));
-
-    transform-origin:
-        center center;
-
-}
-
-
-/* =========================================================
-   JIHANKI IMAGE
-
-   Figma:
-
-   width  = 429
-   height = 786
-   left   = 0
-   top    = 73
-========================================================= */
-
-#jihanki {
-
-    position: absolute;
-
-    left: 0;
-    top: 73px;
-
-    width: 429px;
-    height: 786px;
-
-}
-
-
-#machine-image {
-
-    position: absolute;
-
-    left: 0;
-    top: 0;
-
-    width: 429px;
-    height: 786px;
-
-    display: block;
-
-    user-select: none;
-
-    pointer-events: none;
-
-}
-
-
-/* =========================================================
-   SCREEN
-
-   YOUR FIGMA:
-
-   left   = 98
-   top    = 151
-   width  = 238
-   height = 177
-
-   NOTE:
-   These coordinates are relative to the 429×932
-   viewport, NOT relative to the PNG.
-
-========================================================= */
-
-#screen {
-
-    position: absolute;
-
-    left: 98px;
-    top: 151px;
-
-    width: 238px;
-    height: 177px;
-
-    overflow: hidden;
-
-    /*
-       The physical CRT remains visible underneath.
-
-       This is intentionally NOT opaque.
-    */
-
-    background:
-        rgba(0, 0, 0, 0.42);
-
-    border:
-        1px solid rgba(255,255,255,.08);
-
-    box-shadow:
-
-        inset 0 0 30px
-        rgba(0,0,0,.8),
-
-        0 0 10px
-        rgba(0,0,0,.65);
-
-    z-index: 10;
-
-}
-
-
-/* =========================================================
-   CRT SCANLINES
-========================================================= */
-
-#screen::before {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    z-index: 30;
-
-    background:
-
-        repeating-linear-gradient(
-            0deg,
-
-            transparent 0px,
-
-            transparent 2px,
-
-            rgba(255,255,255,.035) 3px
-        );
-
-}
-
-
-/* =========================================================
-   CRT REFLECTION
-========================================================= */
-
-#screen::after {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    z-index: 31;
-
-    background:
-
-        linear-gradient(
-            110deg,
-
-            rgba(255,255,255,.035),
-
-            transparent 35%
-        );
-
-}
-
-
-/* =========================================================
-   SCREEN CONTENT
-========================================================= */
-
-#screen-content {
-
-    position: relative;
-
-    width: 100%;
-    height: 100%;
-
-    z-index: 20;
-
-    overflow: hidden;
-
-}
-
-
-/* =========================================================
-   STARTUP SCREEN
-========================================================= */
-
-.boot {
-
-    position: absolute;
-
-    inset: 0;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    text-align: center;
-
-    color:
-        rgba(220,220,220,.82);
-
-    animation:
-        boot-flicker 5s infinite;
-
-}
-
-
-/* Japanese title */
-
-.boot-japanese {
-
-    font-family:
-
-        "Yu Mincho",
-        "Hiragino Mincho ProN",
-        serif;
-
-    font-size: 27px;
-
-    letter-spacing:
-        .28em;
-
-    margin-left:
-        .28em;
-
-    text-shadow:
-
-        0 0 7px
-        rgba(220,220,220,.18);
-
-}
-
-
-/* JIHANKI */
-
-.boot-title {
-
-    margin-top: 4px;
-
-    font-size: 16px;
-
-    letter-spacing:
-        .30em;
-
-    margin-left:
-        .30em;
-
-}
-
-
-/* MEMORY ARCHIVE */
-
-.boot-subtitle {
-
-    margin-top: 5px;
-
-    font-size: 7px;
-
-    letter-spacing:
-        .28em;
-
-    margin-left:
-        .28em;
-
-    opacity: .42;
-
-}
-
-
-/* SELECT A MEMORY */
-
-.boot-loading {
-
-    margin-top: 25px;
-
-    font-size: 7px;
-
-    letter-spacing:
-        .15em;
-
-    opacity: .3;
-
-    animation:
-        loading-blink 1.6s infinite;
-
-}
-
-
-/* =========================================================
-   FLICKER
-========================================================= */
-
-@keyframes boot-flicker {
-
-    0%,
-    90%,
-    100% {
-
-        opacity: 1;
-
-    }
-
-    91% {
-
-        opacity: .72;
-
-    }
-
-    92% {
-
-        opacity: 1;
-
-    }
-
-    95% {
-
-        opacity: .88;
-
-    }
-
-}
-
-
-/* =========================================================
-   BLINKING "SELECT A MEMORY"
-========================================================= */
-
-@keyframes loading-blink {
-
-    0%,
-    40% {
-
-        opacity: .12;
-
-    }
-
-    50% {
-
-        opacity: .55;
-
-    }
-
-    60%,
-    100% {
-
-        opacity: .25;
-
-    }
-
-}
-
-
-/* =========================================================
-   PRODUCTS
-
-   FIGMA:
-
-   Good 1:
-   x = 36
-   y = 373
-   w = 62
-   h = 85
-
-   Good 2:
-   x = 118
-
-   Good 3:
-   x = 193
-
-   Good 4:
-   x = 268
-
-========================================================= */
-
-#products {
-
-    position: absolute;
-
-    left: 0;
-    top: 0;
-
-    width: 429px;
-    height: 932px;
-
-    z-index: 50;
-
-    pointer-events: none;
-
-}
-
-
-/* =========================================================
-   PRODUCT BUTTON
-========================================================= */
-
-.product {
-
-    position: absolute;
-
-    width: 62px;
-    height: 85px;
-
-    padding: 0;
-
-    border:
-        1px solid
-        rgba(255,255,255,.08);
-
-    background:
-        rgba(3,3,3,.91);
-
-    color:
-        rgba(160,160,160,.72);
-
-    font-family:
-        "Courier New",
-        monospace;
-
-    font-size: 7px;
-
-    letter-spacing:
-        .10em;
-
-    cursor: pointer;
-
-    pointer-events: auto;
-
-    box-shadow:
-
-        inset 0 0 13px
-        rgba(0,0,0,.9),
-
-        0 2px 5px
-        rgba(0,0,0,.35);
-
-    transition:
-
-        background .15s ease,
-        color .15s ease,
-        transform .08s ease;
-
-}
-
-
-/* =========================================================
-   EXACT PRODUCT POSITIONS
-========================================================= */
-
-#video {
-
-    left: 36px;
-    top: 373px;
-
-}
-
-
-#photo {
-
-    left: 118px;
-    top: 373px;
-
-}
-
-
-#note {
-
-    left: 193px;
-    top: 373px;
-
-}
-
-
-#yokai {
-
-    left: 268px;
-    top: 373px;
-
-}
-
-
-/* =========================================================
-   PRODUCT LABEL
-========================================================= */
-
-.product-label {
-
-    position: absolute;
-
-    left: 50%;
-    top: 50%;
-
-    transform:
-        translate(-50%, -50%);
-
-    white-space: nowrap;
-
-}
-
-
-/* little indicator */
-
-.product::before {
-
-    content: "";
-
-    position: absolute;
-
-    left: 7px;
-    top: 50%;
-
-    width: 5px;
-    height: 5px;
-
-    transform:
-        translateY(-50%);
-
-    border-radius: 50%;
-
-    background:
-        rgba(150,150,150,.22);
-
-}
-
-
-/* =========================================================
-   PRODUCT HOVER
-========================================================= */
-
-.product:hover {
-
-    background:
-        rgba(8,8,8,.96);
-
-    color:
-        rgba(220,220,220,.9);
-
-}
-
-
-.product:hover::before {
-
-    background:
-        rgba(220,220,220,.85);
-
-    box-shadow:
-
-        0 0 7px
-        rgba(220,220,220,.7);
-
-}
-
-
-/* =========================================================
-   PRODUCT PRESS
-========================================================= */
-
-.product:active {
-
-    transform:
-        scale(.95);
-
-}
-
-
-/* =========================================================
-   MACHINE CONTROLS
-========================================================= */
-
-#controls {
-
-    position: absolute;
-
-    left: 0;
-    top: 0;
-
-    width: 429px;
-    height: 932px;
-
-    z-index: 60;
-
-    pointer-events: none;
-
-}
-
-
-/* =========================================================
-   COIN
-
-   FIGMA:
-
-   x = 357
-   y = 434
-   w = 49
-   h = 38
-========================================================= */
-
-#coin-button {
-
-    position: absolute;
-
-    left: 357px;
-    top: 434px;
-
-    width: 49px;
-    height: 38px;
-
-}
-
-
-/* =========================================================
-   HOME
-
-   FIGMA:
-
-   x = 357
-   y = 657
-   w = 49
-   h = 38
-========================================================= */
-
-#home-button {
-
-    position: absolute;
-
-    left: 357px;
-    top: 657px;
-
-    width: 49px;
-    height: 38px;
-
-}
-
-
-/* =========================================================
-   CONTROL STYLE
-========================================================= */
-
-.machine-control {
-
-    padding: 0;
-
-    border:
-        1px solid
-        rgba(255,255,255,.08);
-
-    background:
-        rgba(3,3,3,.91);
-
-    color:
-        rgba(150,150,150,.65);
-
-    font-family:
-        "Courier New",
-        monospace;
-
-    font-size: 6px;
-
-    letter-spacing:
-        .10em;
-
-    cursor: pointer;
-
-    pointer-events: auto;
-
-    box-shadow:
-
-        inset 0 0 10px
-        rgba(0,0,0,.9);
-
-    transition:
-
-        background .15s,
-        color .15s,
-        transform .08s;
-
-}
-
-
-.machine-control:hover {
-
-    background:
-        rgba(10,10,10,.96);
-
-    color:
-        rgba(230,230,230,.9);
-
-}
-
-
-.machine-control:active {
-
-    transform:
-        scale(.94);
-
-}
-
-
-/* =========================================================
-   MEMORY / PICKUP
-
-   FIGMA:
-
-   x = 85
-   y = 717
-   w = 258
-   h = 80
-========================================================= */
-
-#memory-button {
-
-    position: absolute;
-
-    left: 85px;
-    top: 717px;
-
-    width: 258px;
-    height: 80px;
-
-    z-index: 60;
-
-    border:
-        1px solid
-        rgba(255,255,255,.08);
-
-    background:
-        rgba(0,0,0,.88);
-
-    color:
-        rgba(150,150,150,.4);
-
-    font-family:
-        "Courier New",
-        monospace;
-
-    font-size: 7px;
-
-    letter-spacing:
-        .14em;
-
-    cursor: pointer;
-
-    box-shadow:
-
-        inset 0 0 18px
-        rgba(0,0,0,.95);
-
-    transition:
-
-        color .2s,
-        background .2s;
-
-}
-
-
-#memory-button:hover {
-
-    background:
-        rgba(5,5,5,.96);
-
-    color:
-        rgba(220,220,220,.7);
-
-}
-
-
-#memory-button:active {
-
-    transform:
-        scale(.98);
-
-}
-
-
-/* =========================================================
-   ARCHIVE SCREEN
-========================================================= */
-
-.archive {
-
-    width: 100%;
-    height: 100%;
-
-    padding: 12px;
-
-    overflow-y: auto;
-
-    scrollbar-width: none;
-
-}
-
-
-.archive::-webkit-scrollbar {
-
-    display: none;
-
-}
-
-
-.archive-header {
-
-    display: flex;
-
-    justify-content:
-        space-between;
-
-    margin-bottom: 10px;
-
-    padding-bottom: 5px;
-
-    border-bottom:
-        1px solid
-        rgba(255,255,255,.08);
-
-}
-
-
-.archive-title {
-
-    font-size: 8px;
-
-    letter-spacing:
-        .15em;
-
-}
-
-
-.archive-status {
-
-    font-size: 6px;
-
-    opacity: .35;
-
-}
-
-
-.archive-item {
-
-    display: block;
-
-    width: 100%;
-
-    margin-bottom: 5px;
-
-    padding: 7px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.06);
-
-    background:
-        rgba(0,0,0,.35);
-
-    color:
-        rgba(190,190,190,.65);
-
-    font-family:
-        "Courier New",
-        monospace;
-
-    font-size: 7px;
-
-    text-align: left;
-
-    cursor: pointer;
-
-}
-
-
-.archive-item:hover {
-
-    background:
-        rgba(255,255,255,.05);
-
-    color:
-        #ddd;
-
-}
-
-
-.archive-item small {
-
-    display: block;
-
-    margin-top: 3px;
-
-    opacity: .35;
-
-    font-size: 5px;
-
-}
-
-
-/* =========================================================
-   FULLSCREEN MEMORY
-========================================================= */
-
-#artifact {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 1000;
-
-    display: none;
-
-    justify-content: center;
-
-    align-items: center;
-
-    background:
-        rgba(0,0,0,.92);
-
-    padding: 20px;
-
-}
-
-
-#artifact.active {
-
-    display: flex;
-
-}
-
-
-#artifact-content {
-
-    width:
-        min(90vw, 500px);
-
-    max-height:
-        80vh;
-
-    overflow-y: auto;
-
-    padding: 22px;
-
-    background:
-        #080808;
-
-    border:
-        1px solid #333;
-
-    box-shadow:
-        0 20px 60px #000;
-
-    color:
-        #aaa;
-
-}
-
-
-#artifact-close {
-
-    position: fixed;
-
-    right: 18px;
-    top: 18px;
-
-    width: 40px;
-    height: 40px;
-
-    border:
-        1px solid #333;
-
-    background:
-        #050505;
-
-    color:
-        #aaa;
-
-    font-size: 22px;
-
-    cursor: pointer;
-
-}
-
-
-/* =========================================================
-   RESPONSIVE SCALE
-
-   This is the important part.
-
-   We scale the COMPLETE 429×932 composition.
-
-   Nothing gets independently resized.
-   Nothing gets cropped.
-
-========================================================= */
-
-:root {
-
-    --scale: 1;
-
-}
-
-
-/* =========================================================
-   NARROW / NORMAL PHONES
-========================================================= */
-
-@media (max-width: 429px) {
-
-    :root {
-
-        --scale:
-            calc(100vw / 429);
-
-    }
-
-}
-
-
-/* =========================================================
-   SHORT SCREENS
-
-   Prevent vertical cropping.
-
-========================================================= */
-
-@media (min-width: 430px) {
-
-    @media (max-height: 932px) {
-
-        :root {
-
-            --scale:
-                calc(100dvh / 932);
-
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-    }
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #171717;
+            font-family: "Courier New", monospace;
+        }
 
-}
+        button {
+            font: inherit;
+        }
 
+        #viewport {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            width: 429px;
+            height: 932px;
 
-/* =========================================================
-   VERY WIDE / DESKTOP
+            transform:
+                translate(-50%, -50%) scale(var(--scale, 1));
 
-   Don't make the machine enormous.
+            transform-origin: center center;
+        }
+
+        /* =========================================================
+   MACHINE IMAGE
 ========================================================= */
 
-@media (min-width: 700px) {
+        #jihanki {
+            position: absolute;
+            left: 0;
+            top: 73px;
+            width: 429px;
+            height: 786px;
+            z-index: 1;
+        }
 
-    :root {
+        #machine-image {
+            display: block;
+            width: 429px;
+            height: 786px;
+            user-select: none;
+            pointer-events: none;
+        }
 
-        --scale:
-            min(
-                1.15,
-                calc(100dvh / 932)
-            );
-
-    }
-
-}
-
-
-/* =========================================================
-   SAFE AREA
-
-   iPhone notch / Dynamic Island is handled by the
-   centered canvas rather than by moving individual
-   machine elements.
+        /* =========================================================
+   SCREEN
+   EXACT FIGMA COORDINATES
 ========================================================= */
 
-@supports (padding: env(safe-area-inset-top)) {
+        #screen {
+            position: absolute;
 
-    #viewport {
+            left: 98px;
+            top: 151px;
+            width: 238px;
+            height: 177px;
 
-        /*
-           No additional positional adjustments.
+            overflow: hidden;
 
-           The complete composition stays together.
-        */
+            background: rgba(0, 0, 0, .30);
 
-    }
+            border: 1px solid rgba(255, 255, 255, .08);
 
-}
+            box-shadow:
+                inset 0 0 30px rgba(0, 0, 0, .82),
+                0 0 10px rgba(0, 0, 0, .60);
 
-</style>
+            z-index: 20;
+        }
 
+        #screen::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 30;
+
+            background:
+                repeating-linear-gradient(0deg,
+                    transparent 0px,
+                    transparent 2px,
+                    rgba(255, 255, 255, .035) 3px);
+        }
+
+        #screen::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 31;
+
+            background:
+                linear-gradient(110deg,
+                    rgba(255, 255, 255, .035),
+                    transparent 35%);
+        }
+
+        #screen-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 20;
+            overflow: hidden;
+            color: rgba(220, 220, 220, .84);
+        }
+
+        /* =========================================================
+   START SCREEN
+========================================================= */
+
+        .boot {
+            position: absolute;
+            inset: 0;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            animation: boot-flicker 5s infinite;
+        }
+
+        .boot-japanese {
+            font-family:
+                "Yu Mincho",
+                "Hiragino Mincho ProN",
+                serif;
+
+            font-size: 27px;
+            letter-spacing: .28em;
+            margin-left: .28em;
+
+            text-shadow: 0 0 7px rgba(220, 220, 220, .18);
+        }
+
+        .boot-title {
+            margin-top: 4px;
+            font-size: 16px;
+            letter-spacing: .30em;
+            margin-left: .30em;
+        }
+
+        .boot-subtitle {
+            margin-top: 5px;
+            font-size: 7px;
+            letter-spacing: .28em;
+            margin-left: .28em;
+            opacity: .42;
+        }
+
+        .boot-loading {
+            margin-top: 25px;
+            font-size: 7px;
+            letter-spacing: .15em;
+            opacity: .3;
+            animation: loading-blink 1.6s infinite;
+        }
+
+        @keyframes boot-flicker {
+
+            0%,
+            90%,
+            100% {
+                opacity: 1;
+            }
+
+            91% {
+                opacity: .72;
+            }
+
+            92% {
+                opacity: 1;
+            }
+
+            95% {
+                opacity: .88;
+            }
+        }
+
+        @keyframes loading-blink {
+
+            0%,
+            40% {
+                opacity: .12;
+            }
+
+            50% {
+                opacity: .55;
+            }
+
+            60%,
+            100% {
+                opacity: .25;
+            }
+        }
+
+        /* =========================================================
+   PRODUCTS
+   EXACT FIGMA COORDINATES
+========================================================= */
+
+        #products {
+            position: absolute;
+            inset: 0;
+            width: 429px;
+            height: 932px;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        .product {
+            position: absolute;
+
+            width: 62px;
+            height: 85px;
+
+            padding: 0;
+
+            border: 1px solid rgba(255, 255, 255, .13);
+
+            /* More visible than the previous version, but still
+       transparent enough for the physical machine to show. */
+            background: rgba(3, 3, 3, .34);
+
+            color: rgba(235, 235, 235, .82);
+
+            font-family: "Courier New", monospace;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: .08em;
+
+            cursor: pointer;
+            pointer-events: auto;
+
+            text-shadow: 0 0 5px rgba(255, 255, 255, .25);
+
+            box-shadow:
+                inset 0 0 13px rgba(0, 0, 0, .45),
+                0 2px 5px rgba(0, 0, 0, .20);
+
+            transition:
+                background .15s ease,
+                color .15s ease,
+                box-shadow .15s ease,
+                transform .08s ease;
+        }
+
+        .product::before {
+            content: "";
+
+            position: absolute;
+            left: 7px;
+            top: 50%;
+
+            width: 5px;
+            height: 5px;
+
+            transform: translateY(-50%);
+
+            border-radius: 50%;
+
+            background: rgba(220, 220, 220, .38);
+
+            box-shadow: 0 0 4px rgba(255, 255, 255, .12);
+        }
+
+        .product-label {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+
+            transform: translate(-50%, -50%);
+
+            white-space: nowrap;
+        }
+
+        .product:hover,
+        .product:focus-visible,
+        .product:active {
+            background: rgba(0, 0, 0, .55);
+            color: #fff;
+
+            box-shadow:
+                inset 0 0 13px rgba(0, 0, 0, .55),
+                0 0 8px rgba(255, 255, 255, .10);
+        }
+
+        .product:hover::before,
+        .product:focus-visible::before {
+            background: rgba(255, 255, 255, .9);
+            box-shadow: 0 0 7px rgba(255, 255, 255, .7);
+        }
+
+        .product:active {
+            transform: scale(.95);
+        }
+
+        /* ROW 1 */
+        #video {
+            left: 36px;
+            top: 373px;
+        }
+
+        #photo {
+            left: 118px;
+            top: 373px;
+        }
+
+        #note {
+            left: 193px;
+            top: 373px;
+        }
+
+        #yokai {
+            left: 268px;
+            top: 373px;
+        }
+
+        /* ROW 2 — your new Figma coordinates */
+        #music {
+            left: 42px;
+            top: 528px;
+        }
+
+        #sound {
+            left: 117px;
+            top: 528px;
+        }
+
+        #text {
+            left: 192px;
+            top: 528px;
+        }
+
+        #other {
+            left: 269px;
+            top: 528px;
+        }
+
+        /* =========================================================
+   SIDE CONTROLS
+   EXACT FIGMA COORDINATES
+========================================================= */
+
+        #controls {
+            position: absolute;
+            inset: 0;
+            width: 429px;
+            height: 932px;
+            z-index: 60;
+            pointer-events: none;
+        }
+
+        .machine-control {
+            position: absolute;
+
+            padding: 0;
+
+            border: 1px solid rgba(255, 255, 255, .12);
+
+            background: rgba(3, 3, 3, .34);
+
+            color: rgba(235, 235, 235, .75);
+
+            font-family: "Courier New", monospace;
+            font-size: 7px;
+            letter-spacing: .08em;
+
+            cursor: pointer;
+            pointer-events: auto;
+
+            text-shadow: 0 0 5px rgba(255, 255, 255, .18);
+
+            transition:
+                background .15s,
+                color .15s,
+                transform .08s;
+        }
+
+        .machine-control:hover,
+        .machine-control:focus-visible {
+            background: rgba(0, 0, 0, .52);
+            color: #fff;
+        }
+
+        .machine-control:active {
+            transform: scale(.94);
+        }
+
+        /* Coin */
+        #coin-button {
+            left: 357px;
+            top: 434px;
+            width: 49px;
+            height: 38px;
+        }
+
+        /* Home */
+        #home-button {
+            left: 357px;
+            top: 657px;
+            width: 49px;
+            height: 38px;
+        }
+
+        /* =========================================================
+   MEMORY / PICK-UP
+   EXACT FIGMA COORDINATES
+========================================================= */
+
+        #memory-button {
+            position: absolute;
+
+            left: 85px;
+            top: 717px;
+
+            width: 258px;
+            height: 80px;
+
+            z-index: 60;
+
+            border: 1px solid rgba(255, 255, 255, .10);
+
+            background: rgba(0, 0, 0, .58);
+
+            color: rgba(220, 220, 220, .52);
+
+            font-family: "Courier New", monospace;
+            font-size: 8px;
+            letter-spacing: .14em;
+
+            cursor: pointer;
+
+            box-shadow: inset 0 0 18px rgba(0, 0, 0, .75);
+
+            transition:
+                color .2s,
+                background .2s;
+        }
+
+        #memory-button:hover,
+        #memory-button:focus-visible {
+            background: rgba(0, 0, 0, .72);
+            color: rgba(255, 255, 255, .82);
+        }
+
+        #memory-button:active {
+            transform: scale(.98);
+        }
+
+        /* =========================================================
+   ARCHIVE INSIDE CRT
+========================================================= */
+
+        .archive {
+            width: 100%;
+            height: 100%;
+            padding: 12px;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .archive::-webkit-scrollbar {
+            display: none;
+        }
+
+        .archive-header {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+
+            border-bottom: 1px solid rgba(255, 255, 255, .10);
+        }
+
+        .archive-title {
+            font-size: 9px;
+            letter-spacing: .15em;
+        }
+
+        .archive-status {
+            font-size: 7px;
+            opacity: .40;
+        }
+
+        .archive-item {
+            display: block;
+            width: 100%;
+
+            margin-bottom: 5px;
+            padding: 7px;
+
+            border: 1px solid rgba(255, 255, 255, .08);
+
+            background: rgba(0, 0, 0, .30);
+
+            color: rgba(220, 220, 220, .72);
+
+            font-family: "Courier New", monospace;
+            font-size: 8px;
+
+            text-align: left;
+
+            cursor: pointer;
+        }
+
+        .archive-item:hover {
+            background: rgba(255, 255, 255, .06);
+            color: #fff;
+        }
+
+        .archive-item small {
+            display: block;
+            margin-top: 3px;
+            opacity: .40;
+            font-size: 6px;
+        }
+
+        /* =========================================================
+   ARTIFACT / MEMORY VIEW
+========================================================= */
+
+        #artifact {
+            position: fixed;
+            inset: 0;
+
+            z-index: 1000;
+
+            display: none;
+
+            justify-content: center;
+            align-items: center;
+
+            background: rgba(0, 0, 0, .90);
+        }
+
+        #artifact.open {
+            display: flex;
+        }
+
+        .artifact-window {
+            position: relative;
+
+            width: min(90vw, 720px);
+            max-height: 88vh;
+
+            overflow: auto;
+
+            padding: 22px;
+
+            background: #090909;
+            color: #ddd;
+
+            border: 1px solid rgba(255, 255, 255, .14);
+
+            box-shadow:
+                0 0 40px rgba(0, 0, 0, .9),
+                inset 0 0 30px rgba(255, 255, 255, .025);
+        }
+
+        #artifact-close {
+            position: sticky;
+            top: 0;
+            float: right;
+
+            width: 30px;
+            height: 30px;
+
+            border: 1px solid rgba(255, 255, 255, .15);
+
+            background: #111;
+            color: #aaa;
+
+            cursor: pointer;
+        }
+
+        #artifact-content {
+            clear: both;
+            padding-top: 12px;
+        }
+
+        .artifact-title {
+            margin: 0 0 8px;
+            font-size: 18px;
+            letter-spacing: .12em;
+        }
+
+        .artifact-meta {
+            margin-bottom: 18px;
+            color: #777;
+            font-size: 11px;
+        }
+
+        .artifact-text {
+            white-space: pre-wrap;
+            line-height: 1.65;
+            font-size: 13px;
+        }
+
+        .artifact-media {
+            display: block;
+            max-width: 100%;
+            max-height: 65vh;
+            margin: 0 auto;
+        }
+
+        .artifact-audio {
+            width: 100%;
+        }
+
+        .artifact-video {
+            display: block;
+            width: 100%;
+            max-height: 70vh;
+            background: #000;
+        }
+
+        /* =========================================================
+   SMALLER PHONES
+   The canvas itself is still 429×932.
+   Only the scale changes.
+========================================================= */
+
+        @media (max-height: 700px) {
+            .artifact-window {
+                max-height: 84vh;
+            }
+        }
+
+        @media (max-width: 380px) {
+            #screen {
+                /* no geometry change — viewport scaling handles it */
+            }
+        }
+    </style>
 </head>
-
 
 <body>
 
+    <div id="viewport">
 
-<!-- =====================================================
-     COMPLETE 429 × 932 DESIGN CANVAS
-===================================================== -->
+        <!-- Physical machine -->
+        <div id="jihanki">
+            <img id="machine-image" src="assets/jihanki.png" alt="JIHANKI memory vending machine" draggable="false">
+        </div>
 
-<div id="viewport">
+        <!-- CRT -->
+        <div id="screen">
+            <div id="screen-content">
+                <div class="boot">
+                    <div class="boot-japanese">自販機</div>
+                    <div class="boot-title">JIHANKI</div>
+                    <div class="boot-subtitle">MEMORY ARCHIVE</div>
+                    <div class="boot-loading">SELECT A MEMORY</div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Eight archive slots -->
+        <div id="products">
 
-    <!-- =================================================
-         JIHANKI PNG
-    ================================================== -->
+            <button class="product" id="video" data-category="video">
+                <span class="product-label">VIDEO</span>
+            </button>
 
-    <div id="jihanki">
+            <button class="product" id="photo" data-category="photo">
+                <span class="product-label">PHOTO</span>
+            </button>
 
-        <img
-            id="machine-image"
-            src="jihanki.png"
-            alt="JIHANKI"
-        >
+            <button class="product" id="note" data-category="note">
+                <span class="product-label">NOTE</span>
+            </button>
+
+            <button class="product" id="yokai" data-category="yokai">
+                <span class="product-label">妖怪</span>
+            </button>
+
+            <button class="product" id="music" data-category="music">
+                <span class="product-label">MUSIC</span>
+            </button>
+
+            <button class="product" id="sound" data-category="sound">
+                <span class="product-label">SOUND</span>
+            </button>
+
+            <button class="product" id="text" data-category="text">
+                <span class="product-label">TEXT</span>
+            </button>
+
+            <button class="product" id="other" data-category="other">
+                <span class="product-label">OTHER</span>
+            </button>
+
+        </div>
+
+        <!-- Coin / Home -->
+        <div id="controls">
+
+            <button id="coin-button" class="machine-control" type="button" aria-label="Insert coin">
+                COIN
+            </button>
+
+            <button id="home-button" class="machine-control" type="button" aria-label="Home">
+                HOME
+            </button>
+
+        </div>
+
+        <!-- Pick-up slot -->
+        <button id="memory-button" type="button">
+            MEMORY / PICK UP
+        </button>
 
     </div>
 
+    <!-- Large artifact viewer -->
+    <div id="artifact" aria-hidden="true">
+        <div class="artifact-window">
 
-    <!-- =================================================
-         SCREEN
-    ================================================== -->
+            <button id="artifact-close" type="button" aria-label="Close">
+                ×
+            </button>
 
-    <div id="screen">
+            <div id="artifact-content"></div>
 
-        <div id="screen-content">
+        </div>
+    </div>
 
+    <script>
+        /* =========================================================
+           RESPONSIVE CANVAS
+           Keeps the 429 × 932 composition intact on every screen.
+        ========================================================= */
+
+        function resizeJihanki() {
+            const scaleX = window.innerWidth / 429;
+            const scaleY = window.innerHeight / 932;
+
+            const scale = Math.min(scaleX, scaleY);
+
+            document.documentElement.style.setProperty(
+                "--scale",
+                scale
+            );
+        }
+
+        window.addEventListener("resize", resizeJihanki);
+        window.addEventListener("orientationchange", resizeJihanki);
+        resizeJihanki();
+
+
+        /* =========================================================
+           ARCHIVE DATA
+           We first try data/archive.js if the existing project has it.
+           The fallback keeps the HTML usable by itself.
+        ========================================================= */
+
+        const FALLBACK_ARCHIVE = [
+            {
+                id: "video-01",
+                title: "Documentation of Julia Baranyuk",
+                category: "video",
+                type: "video",
+                file: "media/video/eli.mp4",
+                date: "2026-07-22"
+            },
+            {
+                id: "yokai-01",
+                title: "富士山六大妖怪",
+                category: "yokai",
+                type: "text",
+                file: "documents/yokai/fuji-six-yokai.md",
+                date: "2026-08-01"
+            },
+            {
+                id: "music-01",
+                title: "Moonlit Koto Curse",
+                category: "music",
+                type: "audio",
+                file: "media/music/Moonlit Koto Curse.mp3",
+                date: "2026-08-01"
+            },
+            {
+                id: "sound-01",
+                title: "Field Recording",
+                category: "sound",
+                type: "audio",
+                file: "media/sound/hellyea.wav",
+                date: "2026-07-22"
+            },
+            {
+                id: "photo-01",
+                title: "JIHANKI / Cover",
+                category: "photo",
+                type: "image",
+                file: "media/photo/cover1.png",
+                date: "2026-07-22"
+            },
+            {
+                id: "note-01",
+                title: "FIRST JIHANKI",
+                category: "note",
+                type: "text",
+                file: "documents/notes/first-jihanki.md",
+                date: "2026-07-22"
+            },
+            {
+                id: "note-02",
+                title: "ARCHIVE ROTATION",
+                category: "note",
+                type: "text",
+                file: "documents/notes/archive-rotation.md",
+                date: "2026-07-23"
+            },
+            {
+                id: "note-03",
+                title: "EXPEDITION 2026-07-22",
+                category: "note",
+                type: "text",
+                file: "documents/notes/expedition-2026-07-22.md",
+                date: "2026-07-22"
+            }
+        ];
+
+        let archive = FALLBACK_ARCHIVE;
+
+
+        /* =========================================================
+           OPTIONAL data/archive.js SUPPORT
+        
+           If archive.js defines:
+               window.JIHANKI_ARCHIVE
+           or:
+               window.archive
+           the site will use it.
+        
+           This means the HTML remains compatible with the archive
+           structure we have been building.
+        ========================================================= */
+
+        (function loadArchiveData() {
+            const script = document.createElement("script");
+
+            script.src = "data/archive.js";
+
+            script.onload = function () {
+                if (Array.isArray(window.JIHANKI_ARCHIVE)) {
+                    archive = window.JIHANKI_ARCHIVE;
+                } else if (Array.isArray(window.archive)) {
+                    archive = window.archive;
+                }
+            };
+
+            script.onerror = function () {
+                /* Fallback data remains active. */
+            };
+
+            document.head.appendChild(script);
+        })();
+
+
+        /* =========================================================
+           HELPERS
+        ========================================================= */
+
+        const screenContent = document.getElementById("screen-content");
+        const artifact = document.getElementById("artifact");
+        const artifactContent = document.getElementById("artifact-content");
+
+
+        function categoryItems(category) {
+            return archive.filter(item => {
+                const c = String(item.category || item.type || "").toLowerCase();
+
+                if (category === "note") {
+                    return c === "note" || c === "notes";
+                }
+
+                if (category === "yokai") {
+                    return c === "yokai" || c === "妖怪";
+                }
+
+                if (category === "text") {
+                    return c === "text" || c === "document";
+                }
+
+                if (category === "other") {
+                    return ![
+                        "video", "photo", "image",
+                        "note", "notes",
+                        "yokai", "妖怪",
+                        "music", "audio",
+                        "sound",
+                        "text", "document"
+                    ].includes(c);
+                }
+
+                return c === category;
+            });
+        }
+
+
+        function showHome() {
+            screenContent.innerHTML = `
+        <div class="boot">
+            <div class="boot-japanese">自販機</div>
+            <div class="boot-title">JIHANKI</div>
+            <div class="boot-subtitle">MEMORY ARCHIVE</div>
+            <div class="boot-loading">SELECT A MEMORY</div>
+        </div>
+    `;
+        }
+
+
+        function showCategory(category) {
+            const items = categoryItems(category);
+
+            const title =
+                category === "yokai"
+                    ? "妖怪"
+                    : category.toUpperCase();
+
+            screenContent.innerHTML = `
+        <div class="archive">
+            <div class="archive-header">
+                <span class="archive-title">${escapeHTML(title)}</span>
+                <span class="archive-status">${items.length} ITEMS</span>
+            </div>
+
+            ${items.length
+                    ? items.map((item, index) => `
+                    <button
+                        class="archive-item"
+                        data-index="${archive.indexOf(item)}"
+                        type="button">
+
+                        ${String(index + 1).padStart(2, "0")}
+                        &nbsp;&nbsp;
+                        ${escapeHTML(item.title || "UNTITLED")}
+
+                        ${item.date
+                            ? `<small>${escapeHTML(item.date)}</small>`
+                            : ""
+                        }
+
+                    </button>
+                `).join("")
+                    : `
+                    <div class="archive-item">
+                        NO MEMORY RECORDED
+                    </div>
+                `
+                }
+        </div>
+    `;
+
+            screenContent
+                .querySelectorAll(".archive-item[data-index]")
+                .forEach(button => {
+                    button.addEventListener("click", () => {
+                        const item = archive[
+                            Number(button.dataset.index)
+                        ];
+
+                        openItem(item);
+                    });
+                });
+        }
+
+
+        function escapeHTML(value) {
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+
+        /* =========================================================
+           OPEN MEMORY
+        ========================================================= */
+
+        async function openItem(item) {
+            if (!item) return;
+
+            const title = escapeHTML(item.title || "UNTITLED");
+            const date = escapeHTML(item.date || "");
+            const type = String(item.type || item.category || "")
+                .toLowerCase();
+
+            artifactContent.innerHTML = `
+        <h1 class="artifact-title">${title}</h1>
+        <div class="artifact-meta">
+            ${date}${date && type ? " / " : ""}${escapeHTML(type)}
+        </div>
+        <div id="artifact-body">LOADING MEMORY...</div>
+    `;
+
+            artifact.classList.add("open");
+            artifact.setAttribute("aria-hidden", "false");
+
+            const body = document.getElementById("artifact-body");
+            const file = item.file || item.path;
+
+            if (!file) {
+                body.textContent = item.text || "NO DATA";
+                return;
+            }
+
+            const extension =
+                file.split("?")[0]
+                    .split(".")
+                    .pop()
+                    .toLowerCase();
+
+            /* Image */
+            if (
+                type === "image" ||
+                type === "photo" ||
+                ["png", "jpg", "jpeg", "webp", "gif"].includes(extension)
+            ) {
+                body.innerHTML = `
+            <img
+                class="artifact-media"
+                src="${escapeHTML(file)}"
+                alt="${title}">
+        `;
+                return;
+            }
+
+            /* Audio */
+            if (
+                type === "audio" ||
+                type === "music" ||
+                type === "sound" ||
+                ["mp3", "wav", "ogg", "m4a", "flac"].includes(extension)
+            ) {
+                body.innerHTML = `
+            <audio
+                class="artifact-audio"
+                controls
+                autoplay
+                src="${escapeHTML(file)}">
+            </audio>
+        `;
+                return;
+            }
+
+            /* Video */
+            if (
+                type === "video" ||
+                ["mp4", "webm", "mov"].includes(extension)
+            ) {
+                body.innerHTML = `
+            <video
+                class="artifact-video"
+                controls
+                autoplay
+                playsinline
+                src="${escapeHTML(file)}">
+            </video>
+        `;
+                return;
+            }
+
+            /* Text / Markdown / HTML */
+            try {
+                const response = await fetch(file);
+
+                if (!response.ok) {
+                    throw new Error("Could not load file");
+                }
+
+                const text = await response.text();
+
+                body.innerHTML = `
+            <div class="artifact-text">
+                ${escapeHTML(text)}
+            </div>
+        `;
+            } catch (error) {
+                body.textContent =
+                    item.text ||
+                    "MEMORY COULD NOT BE READ.";
+            }
+        }
+
+
+        /* =========================================================
+           PRODUCT BUTTONS
+        ========================================================= */
+
+        document
+            .querySelectorAll(".product")
+            .forEach(button => {
+
+                button.addEventListener("click", () => {
+
+                    const category =
+                        button.dataset.category;
+
+                    showCategory(category);
+                });
+
+            });
+
+
+        /* =========================================================
+           COIN
+        ========================================================= */
+
+        document
+            .getElementById("coin-button")
+            .addEventListener("click", () => {
+
+                screenContent.innerHTML = `
             <div class="boot">
-
-                <div class="boot-japanese">
-                    自販機
-                </div>
-
-                <div class="boot-title">
-                    JIHANKI
-                </div>
-
+                <div class="boot-title">COIN ACCEPTED</div>
                 <div class="boot-subtitle">
-                    MEMORY ARCHIVE
+                    MEMORY ACCESS ENABLED
                 </div>
-
                 <div class="boot-loading">
                     SELECT A MEMORY
                 </div>
-
             </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- =================================================
-         PRODUCTS
-    ================================================== -->
-
-    <div id="products">
-
-
-        <button
-            id="video"
-            class="product"
-            data-type="videos"
-        >
-
-            <span class="product-label">
-                VIDEO
-            </span>
-
-        </button>
-
-
-        <button
-            id="photo"
-            class="product"
-            data-type="photos"
-        >
-
-            <span class="product-label">
-                PHOTO
-            </span>
-
-        </button>
-
-
-        <button
-            id="note"
-            class="product"
-            data-type="notes"
-        >
-
-            <span class="product-label">
-                NOTE
-            </span>
-
-        </button>
-
-
-        <button
-            id="yokai"
-            class="product"
-            data-type="yokai"
-        >
-
-            <span class="product-label">
-                妖怪
-            </span>
-
-        </button>
-
-
-    </div>
-
-
-    <!-- =================================================
-         HOME / COIN
-    ================================================== -->
-
-    <div id="controls">
-
-
-        <button
-            id="coin-button"
-            class="machine-control"
-        >
-            COIN
-        </button>
-
-
-        <button
-            id="home-button"
-            class="machine-control"
-        >
-            HOME
-        </button>
-
-
-        <button
-            id="memory-button"
-        >
-            INSERT COIN
-        </button>
-
-
-    </div>
-
-
-</div>
-
-
-<!-- =====================================================
-     MEMORY ARTIFACT
-===================================================== -->
-
-<div id="artifact">
-
-    <button id="artifact-close">
-        ×
-    </button>
-
-    <div id="artifact-content"></div>
-
-</div>
-
-
-
-<script>
-
-/* =========================================================
-   DATA
-========================================================= */
-
-const archive = {
-
-
-    videos: [
-
-        {
-            title:
-                "富士山六体妖怪",
-
-            date:
-                "2026",
-
-            text:
-                "A fictional documentary about six yokai said to inhabit the Fuji region."
-        },
-
-
-        {
-            title:
-                "UNO-MISAKI",
-
-            date:
-                "2026",
-
-            text:
-                "The tunnel is a recording device. The walls remember footsteps, coins, engines and voices."
-        }
-
-    ],
-
-
-    photos: [
-
-        {
-            title:
-                "SAIKO",
-
-            date:
-                "2026",
-
-            text:
-                "Lake Saiko. Field documentation."
-        },
-
-
-        {
-            title:
-                "AOKIGAHARA",
-
-            date:
-                "2026",
-
-            text:
-                "Forest memory archive."
-        },
-
-
-        {
-            title:
-                "UNO-MISAKI",
-
-            date:
-                "2026",
-
-            text:
-                "The tunnel archive."
-        }
-
-    ],
-
-
-    notes: [
-
-        {
-            title:
-                "FIRST JIHANKI",
-
-            date:
-                "2026.07.22",
-
-            text:
-                "A vending machine glowing alone at night."
-        },
-
-
-        {
-            title:
-                "ARCHIVE ROTATION",
-
-            date:
-                "2026",
-
-            text:
-                "At night, the archive is overwritten. The same place may contain several layers of time."
-        },
-
-
-        {
-            title:
-                "PIEZOELECTRIC MEMORY",
-
-            date:
-                "2026",
-
-            text:
-                "The walls behave like a recording device."
-        }
-
-    ],
-
-
-    yokai: [
-
-        {
-            title:
-                "上葉山",
-
-            date:
-                "FUJI REGION",
-
-            text:
-                "Archive entry."
-        },
-
-
-        {
-            title:
-                "水好鬼",
-
-            date:
-                "FUJI REGION",
-
-            text:
-                "Archive entry."
-        },
-
-
-        {
-            title:
-                "須賀山",
-
-            date:
-                "FUJI REGION",
-
-            text:
-                "Archive entry."
-        },
-
-
-        {
-            title:
-                "江花師",
-
-            date:
-                "FUJI REGION",
-
-            text:
-                "Archive entry."
-        },
-
-
-        {
-            title:
-                "下津賀",
-
-            date:
-                "FUJI REGION",
-
-            text:
-                "Archive entry."
-        },
-
-
-        {
-            title:
-                "保外神",
-
-            date:
-                "FUJI REGION",
-
-            text:
-                "Archive entry."
-        }
-
-    ]
-
-};
-
-
-/* =========================================================
-   ELEMENTS
-========================================================= */
-
-const screenContent =
-    document.getElementById(
-        "screen-content"
-    );
-
-
-const products =
-    document.querySelectorAll(
-        ".product"
-    );
-
-
-const homeButton =
-    document.getElementById(
-        "home-button"
-    );
-
-
-const coinButton =
-    document.getElementById(
-        "coin-button"
-    );
-
-
-const memoryButton =
-    document.getElementById(
-        "memory-button"
-    );
-
-
-const artifact =
-    document.getElementById(
-        "artifact"
-    );
-
-
-const artifactContent =
-    document.getElementById(
-        "artifact-content"
-    );
-
-
-const artifactClose =
-    document.getElementById(
-        "artifact-close"
-    );
-
-
-/* =========================================================
-   HOME SCREEN
-========================================================= */
-
-function showHome() {
-
-    screenContent.innerHTML = `
-
-        <div class="boot">
-
-            <div class="boot-japanese">
-                自販機
-            </div>
-
-            <div class="boot-title">
-                JIHANKI
-            </div>
-
-            <div class="boot-subtitle">
-                MEMORY ARCHIVE
-            </div>
-
-            <div class="boot-loading">
-                SELECT A MEMORY
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   ARCHIVE HEADER
-========================================================= */
-
-function archiveHeader(title) {
-
-    return `
-
-        <div class="archive">
-
-            <div class="archive-header">
-
-                <span class="archive-title">
-                    ${title}
-                </span>
-
-                <span class="archive-status">
-                    ONLINE
-                </span>
-
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   SHOW ARCHIVE
-========================================================= */
-
-function showArchive(type) {
-
-    const items =
-        archive[type];
-
-    screenContent.innerHTML =
-        archiveHeader(
-            type.toUpperCase()
-        );
-
-
-    const container =
-        screenContent.querySelector(
-            ".archive"
-        );
-
-
-    items.forEach(
-        (item, index) => {
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-
-            button.className =
-                "archive-item";
-
-
-            button.innerHTML = `
-
-                ${String(index + 1).padStart(2, "0")}
-
-                &nbsp;&nbsp;
-
-                ${item.title}
-
-                <small>
-                    ${item.date}
-                </small>
-
-            `;
-
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    openArtifact(item);
-
-                }
-            );
-
-
-            container.appendChild(
-                button
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   ARTIFACT
-========================================================= */
-
-function openArtifact(item) {
-
-    artifactContent.innerHTML = `
-
-        <div style="
-            font-size:12px;
-            letter-spacing:.15em;
-            margin-bottom:8px;
-        ">
-            ${item.title}
-        </div>
-
-
-        <div style="
-            font-size:7px;
-            opacity:.35;
-            margin-bottom:20px;
-        ">
-            ${item.date || ""}
-        </div>
-
-
-        <div style="
-            font-size:10px;
-            line-height:1.8;
-            white-space:pre-line;
-            opacity:.75;
-        ">
-            ${item.text || ""}
-        </div>
-
-    `;
-
-
-    artifact.classList.add(
-        "active"
-    );
-
-}
-
-
-/* =========================================================
-   PRODUCT BUTTONS
-========================================================= */
-
-products.forEach(
-    button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                showArchive(
-                    button.dataset.type
-                );
-
-            }
-        );
-
-    }
-);
-
-
-/* =========================================================
-   HOME
-========================================================= */
-
-homeButton.addEventListener(
-    "click",
-    showHome
-);
-
-
-/* =========================================================
-   RANDOM MEMORY
-========================================================= */
-
-const randomMemories = [
-
-    {
-        title:
-            "MEMORY 001",
-
-        date:
-            "ARCHIVE",
-
-        text:
-            "A vending machine was standing alone beside the road.\n\nNo one was using it.\n\nIt was still illuminated."
-    },
-
-
-    {
-        title:
-            "MEMORY 002",
-
-        date:
-            "ARCHIVE",
-
-        text:
-            "The sound of coins belongs to another decade."
-    },
-
-
-    {
-        title:
-            "MEMORY 003",
-
-        date:
-            "UNO-MISAKI",
-
-        text:
-            "A bicycle passed through the tunnel.\n\nFor a moment it sounded like someone riding through 2005."
-    },
-
-
-    {
-        title:
-            "MEMORY 004",
-
-        date:
-            "ARCHIVE",
-
-        text:
-            "The machine remembers things that were never entered into its database."
-    },
-
-
-    {
-        title:
-            "MEMORY 005",
-
-        date:
-            "WARNING",
-
-        text:
-            "Do not stand on the white line."
-    }
-
-];
-
-
-/* =========================================================
-   DISPENSE MEMORY
-========================================================= */
-
-function dispenseMemory() {
-
-    const memory =
-        randomMemories[
-            Math.floor(
-                Math.random() *
-                randomMemories.length
-            )
-        ];
-
-
-    memoryButton.animate(
-
-        [
-            {
-                opacity: .4
-            },
-
-            {
-                opacity: 1
-            },
-
-            {
-                opacity: .4
-            }
-
-        ],
-
-        {
-            duration: 350,
-            iterations: 3
-        }
-
-    );
-
-
-    setTimeout(
-        () => {
-
-            openArtifact(
-                memory
-            );
-
-        },
-
-        500
-    );
-
-}
-
-
-/* =========================================================
-   COIN
-========================================================= */
-
-coinButton.addEventListener(
-    "click",
-    () => {
-
-        screenContent.innerHTML = `
-
-            <div class="boot">
-
-                <div
-                    class="boot-japanese"
-                    style="font-size:25px"
-                >
-                    …
-                </div>
-
-                <div class="boot-loading">
-                    READING MEMORY
-                </div>
-
-            </div>
-
         `;
 
-
-        setTimeout(
-            dispenseMemory,
-            700
-        );
-
-    }
-);
+            });
 
 
-/* =========================================================
-   MEMORY BUTTON
-========================================================= */
+        /* =========================================================
+           HOME
+        ========================================================= */
 
-memoryButton.addEventListener(
-    "click",
-    dispenseMemory
-);
-
-
-/* =========================================================
-   CLOSE
-========================================================= */
-
-artifactClose.addEventListener(
-    "click",
-    () => {
-
-        artifact.classList.remove(
-            "active"
-        );
-
-    }
-);
+        document
+            .getElementById("home-button")
+            .addEventListener("click", showHome);
 
 
-/* =========================================================
-   CLICK OUTSIDE
-========================================================= */
+        /* =========================================================
+           PICK-UP
+        ========================================================= */
 
-artifact.addEventListener(
-    "click",
-    event => {
+        document
+            .getElementById("memory-button")
+            .addEventListener("click", () => {
 
-        if (
-            event.target === artifact
-        ) {
+                const latest =
+                    archive[archive.length - 1];
 
-            artifact.classList.remove(
-                "active"
-            );
+                if (latest) {
+                    openItem(latest);
+                } else {
+                    showHome();
+                }
 
+            });
+
+
+        /* =========================================================
+           CLOSE ARTIFACT
+        ========================================================= */
+
+        document
+            .getElementById("artifact-close")
+            .addEventListener("click", closeArtifact);
+
+        artifact.addEventListener("click", event => {
+            if (event.target === artifact) {
+                closeArtifact();
+            }
+        });
+
+        function closeArtifact() {
+            artifact.classList.remove("open");
+            artifact.setAttribute("aria-hidden", "true");
+
+            const media =
+                artifactContent.querySelectorAll("audio, video");
+
+            media.forEach(element => {
+                try {
+                    element.pause();
+                } catch (_) { }
+            });
         }
 
-    }
-);
+
+        /* ESC / BACK */
+        document.addEventListener("keydown", event => {
+
+            if (event.key === "Escape") {
+                closeArtifact();
+                showHome();
+            }
+
+        });
 
 
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
-showHome();
-
-
-/* =========================================================
-   RESPONSIVE SCALE ENGINE
-
-   This is deliberately JavaScript rather than relying
-   on several CSS media queries.
-
-   The whole 429×932 design is treated as one canvas.
-
-   Therefore:
-
-   iPhone 15 Pro Max
-       → approximately 1:1
-
-   iPhone smaller
-       → scales down
-
-   Android tall phone
-       → scales down if necessary
-
-   Landscape
-       → scales down
-
-   Desktop
-       → remains centered
-
-   NOTHING IS CROPPED.
-========================================================= */
-
-function resizeJihanki() {
-
-    const viewportWidth =
-        window.innerWidth;
-
-
-    const viewportHeight =
-        window.innerHeight;
-
-
-    const designWidth =
-        429;
-
-
-    const designHeight =
-        932;
-
-
-    const scaleX =
-        viewportWidth /
-        designWidth;
-
-
-    const scaleY =
-        viewportHeight /
-        designHeight;
-
-
-    /*
-       Always use the smaller dimension.
-
-       This is the crucial part that prevents
-       the PNG from being cropped.
-    */
-
-    let scale =
-        Math.min(
-            scaleX,
-            scaleY
-        );
-
-
-    /*
-       Don't make it absurdly large on desktop.
-    */
-
-    scale =
-        Math.min(
-            scale,
-            1.15
-        );
-
-
-    document.documentElement
-        .style
-        .setProperty(
-            "--scale",
-            scale
-        );
-
-}
-
-
-window.addEventListener(
-    "resize",
-    resizeJihanki
-);
-
-
-window.addEventListener(
-    "orientationchange",
-    () => {
-
-        setTimeout(
-            resizeJihanki,
-            100
-        );
-
-    }
-);
-
-
-resizeJihanki();
-
-</script>
-
+        /* Android/browser back button */
+        window.addEventListener("popstate", () => {
+            closeArtifact();
+            showHome();
+        });
+    </script>
 
 </body>
 

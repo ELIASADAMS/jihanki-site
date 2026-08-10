@@ -1,0 +1,250 @@
+/*
+    JIHANKI MACHINE — COORDINATE PATCH
+
+    Original Figma coordinate system:
+    429 × 786
+
+    Every interactive element is positioned against that exact
+    coordinate system. The entire machine scales as one object.
+*/
+
+.jihanki {
+    --machine-w: 429;
+    --machine-h: 786;
+
+    position: relative;
+    width: min(100%, 429px);
+    aspect-ratio: 429 / 786;
+    flex: 0 0 auto;
+}
+
+.jihanki-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    z-index: 1;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Shared interactive layer */
+
+.machine-screen,
+.slot,
+.control,
+.memory-label {
+    position: absolute;
+    z-index: 5;
+}
+
+/* SCREEN — EXACT FIGMA */
+
+.machine-screen {
+    left: calc(98 / 429 * 100%);
+    top: calc(151 / 786 * 100%);
+    width: calc(238 / 429 * 100%);
+    height: calc(177 / 786 * 100%);
+
+    overflow: hidden;
+}
+
+/* FIRST ROW — EXACT FIGMA */
+
+.slot {
+    width: calc(62 / 429 * 100%);
+    height: calc(85 / 786 * 100%);
+
+    border: 0;
+    padding: 0;
+
+    background: rgba(255,255,255,.025);
+    color: rgba(255,255,255,.62);
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        background .12s ease,
+        color .12s ease,
+        box-shadow .12s ease;
+}
+
+/* Make the hit areas visible, but still subtle */
+
+.slot span {
+    font-family: "Courier New", monospace;
+    font-size: clamp(7px, 2.15vw, 10px);
+    font-weight: bold;
+    letter-spacing: .08em;
+    opacity: .65;
+    text-shadow: 0 0 7px rgba(255,255,255,.22);
+}
+
+.slot:hover,
+.slot:active {
+    background: rgba(255,255,255,.13);
+    color: rgba(255,255,255,.95);
+    box-shadow: inset 0 0 12px rgba(255,255,255,.08);
+}
+
+.slot:hover span,
+.slot:active span {
+    opacity: 1;
+}
+
+/* Figma:
+   Good 1  left 36  top 373
+   Good 2  left 118 top 373
+   Good 3  left 193 top 373
+   Good 4  left 268 top 373
+*/
+
+.slot-1 {
+    left: calc(36 / 429 * 100%);
+    top: calc(373 / 786 * 100%);
+}
+
+.slot-2 {
+    left: calc(118 / 429 * 100%);
+    top: calc(373 / 786 * 100%);
+}
+
+.slot-3 {
+    left: calc(193 / 429 * 100%);
+    top: calc(373 / 786 * 100%);
+}
+
+.slot-4 {
+    left: calc(268 / 429 * 100%);
+    top: calc(373 / 786 * 100%);
+}
+
+/* SECOND ROW
+   Good 5  left 42  top 528
+   Good 6  left 117 top 528
+   Good 7  left 192 top 528
+   Good 8  left 269 top 528
+*/
+
+.slot-5 {
+    left: calc(42 / 429 * 100%);
+    top: calc(528 / 786 * 100%);
+}
+
+.slot-6 {
+    left: calc(117 / 429 * 100%);
+    top: calc(528 / 786 * 100%);
+}
+
+.slot-7 {
+    left: calc(192 / 429 * 100%);
+    top: calc(528 / 786 * 100%);
+}
+
+.slot-8 {
+    left: calc(269 / 429 * 100%);
+    top: calc(528 / 786 * 100%);
+}
+
+/* SIDE CONTROLS — EXACT FIGMA */
+
+.control {
+    border: 0;
+    padding: 0;
+
+    background: rgba(255,255,255,.025);
+    color: rgba(255,255,255,.55);
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control span {
+    font-size: clamp(6px, 1.8vw, 9px);
+    letter-spacing: .08em;
+    opacity: .7;
+}
+
+.control:hover,
+.control:active {
+    background: rgba(255,255,255,.13);
+    color: #fff;
+}
+
+/* Coin:
+   width 49
+   height 38
+   left 357
+   top 434
+*/
+
+.coin {
+    left: calc(357 / 429 * 100%);
+    top: calc(434 / 786 * 100%);
+    width: calc(49 / 429 * 100%);
+    height: calc(38 / 786 * 100%);
+}
+
+/* Home:
+   width 49
+   height 38
+   left 357
+   top 657
+*/
+
+.home {
+    left: calc(357 / 429 * 100%);
+    top: calc(657 / 786 * 100%);
+    width: calc(49 / 429 * 100%);
+    height: calc(38 / 786 * 100%);
+}
+
+/* MEMORY:
+   width 258
+   height 80
+   left 85
+   top 717
+*/
+
+.memory-label {
+    left: calc(85 / 429 * 100%);
+    top: calc(717 / 786 * 100%);
+    width: calc(258 / 429 * 100%);
+    height: calc(80 / 786 * 100%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: rgba(255,255,255,.2);
+    font-size: clamp(8px, 2.3vw, 12px);
+    letter-spacing: .3em;
+
+    pointer-events: none;
+
+    animation: memoryBlink 2.8s steps(1, end) infinite;
+}
+
+@keyframes memoryBlink {
+    0%, 38%   { opacity: .22; }
+    39%, 45%  { opacity: .05; }
+    46%, 72%  { opacity: .28; }
+    73%, 100% { opacity: .09; }
+}
+
+/* Keyboard users still get a visible target */
+
+.slot:focus-visible,
+.control:focus-visible {
+    outline: 1px solid rgba(255,255,255,.8);
+    outline-offset: 1px;
+}
