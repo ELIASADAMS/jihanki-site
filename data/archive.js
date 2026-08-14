@@ -235,12 +235,12 @@ window.JIHANKI_ARCHIVE = JIHANKI_ARCHIVE;
         const sound = new Audio(src);
         sound.preload = "auto";
         sound.volume = name === "coin" ? 0.55 : 0.40;
-        sound.play().catch(() => {});
+        sound.play().catch(() => { });
     }
 
     function stopForeground() {
         if (!foreground) return;
-        try { foreground.pause(); } catch (_) {}
+        try { foreground.pause(); } catch (_) { }
         foreground = null;
         setAmbientMuted(false);
     }
@@ -423,7 +423,7 @@ window.JIHANKI_ARCHIVE = JIHANKI_ARCHIVE;
         }
     }
 
-    window.openItem = async function(item) {
+    window.openItem = async function (item) {
         if (!item) return;
 
         playSFX("button");
