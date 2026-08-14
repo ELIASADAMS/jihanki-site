@@ -520,7 +520,7 @@ window.JIHANKI_ARCHIVE = JIHANKI_ARCHIVE;
         .markdown-rendered ul,.markdown-rendered ol { margin:0 0 14px; padding-left:22px; }
         .markdown-rendered li { margin:4px 0; }
         .markdown-rendered hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:18px 0; }
-        .markdown-image { display:block; width:100%; max-height:280px; object-fit:contain; margin:0 0 16px; background:#000; }
+        .markdown-image { display:block; width:100%; max-height:280px; object-fit:contain; margin:0 0 16px; background:#090909; }
         .markdown-audio { margin:8px 0 18px; padding:8px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.025); }
         .markdown-audio-label { margin-bottom:6px; font-size:.82em; letter-spacing:.06em; }
         .markdown-audio audio { display:block; width:100%; height:32px; }
