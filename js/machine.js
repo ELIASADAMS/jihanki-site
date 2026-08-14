@@ -6,7 +6,7 @@ function setMemoryLabel(text) {
 }
 
 function homeScreen() {
-
+    playSFX("home");
     closeArtifact();
 
     screenContent.innerHTML = `
@@ -21,6 +21,7 @@ function homeScreen() {
 }
 
 function coinAnimation() {
+    playSFX("coin");
 
     setMemoryLabel("READING");
 
@@ -37,10 +38,9 @@ function coinAnimation() {
 }
 
 function bindMachineControls() {
-
     document.querySelectorAll("[data-action]").forEach(button => {
-
         button.addEventListener("click", () => {
+            startBackgroundLoop();
 
             const action = button.dataset.action;
 
