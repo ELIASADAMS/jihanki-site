@@ -8,11 +8,11 @@
  * id       stable unique id
  * title    display title
  * date     date / era label
- * type     video | image | audio | text | project
+ * type     video | image | audio | text
  * category video | photo | note | yokai | music | sound | text | project | other
  * author   eli | julia | shared
- * project  optional project id, e.g. fuji-sonicpi
- * file     local path OR markdown file
+ * project  optional project id
+ * file     local media path OR markdown file
  * link     optional external URL (e.g. Bandcamp)
  */
 
@@ -79,7 +79,7 @@ const ARCHIVE = {
             type: "text",
             category: "yokai",
             author: "eli",
-            project: "fuji-sonicpi",
+            project: "fuji-yokai",
             file: "documents/yokai/fuji-six-yokai.md"
         }
     ],
@@ -116,7 +116,7 @@ const ARCHIVE = {
             type: "text",
             category: "text",
             author: "eli",
-            project: "fuji-sonicpi",
+            project: "fuji-yokai",
             file: "documents/scripts/fuji-six-yokai-script.md"
         }
     ],
@@ -126,10 +126,11 @@ const ARCHIVE = {
             id: "fuji-sonicpi",
             title: "FUJI / SONIC PI",
             date: "2026",
-            type: "project",
+            type: "text",
             category: "project",
             author: "eli",
-            file: "fuji/index.html"
+            project: "fuji-sonicpi",
+            file: "documents/projects/fuji-sonicpi.md"
         }
     ],
 
