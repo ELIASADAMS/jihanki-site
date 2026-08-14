@@ -1,6 +1,11 @@
 function showArchive(type) {
 
-    const items = ARCHIVE[type] || [];
+    // Projects are intentionally reachable through the existing OTHER slot.
+    // This keeps the physical vending-machine geometry unchanged.
+    const baseItems = ARCHIVE[type] || [];
+    const items = type === "other"
+        ? [...baseItems, ...(ARCHIVE.projects || [])]
+        : baseItems;
 
     screenContent.innerHTML = `
         <div class="archive">
@@ -27,15 +32,16 @@ function showArchive(type) {
         button.className = "archive-item";
 
         const icon =
-            item.type === "music" || item.type === "sound" ? "▶ " :
+            item.type === "audio" ? "▶ " :
             item.type === "video" ? "▣ " :
-            item.type === "photo" ? "□ " :
+            item.type === "image" ? "□ " :
+            item.type === "project" ? "△ " :
             "· ";
 
         button.innerHTML = `
             ${icon}${String(index + 1).padStart(2, "0")}
             &nbsp;${escapeHTML(item.title)}
-            <small>${escapeHTML(item.date || "")}</small>
+            <small>${escapeHTML(item.author || "")} ${item.date ? " / " + item.date : ""}</small>
         `;
 
         button.addEventListener("click", () => openArchiveItem(item));
@@ -46,7 +52,14 @@ function showArchive(type) {
 
 async function openArchiveItem(item) {
 
-    if (item.type === "music" || item.type === "sound") {
+    // HTML project pages must be opened as pages, never fetched and displayed
+    // as text. This is what caused fuji/index.html to appear as raw source.
+    if (item.type === "project") {
+        window.location.href = item.file;
+        return;
+    }
+
+    if (item.type === "audio") {
         openAudio(item);
         return;
     }
@@ -56,24 +69,35 @@ async function openArchiveItem(item) {
         return;
     }
 
-    if (item.type === "photo") {
+    if (item.type === "image") {
         openPhoto(item);
         return;
     }
 
+    // Documentation is a Markdown file and is rendered inside JIHANKI.
+    if (item.documentation) {
+        await openMarkdownPath(item.documentation, item);
+        return;
+    }
+
+    if (item.file && /\.md$/i.test(item.file)) {
+        await openMarkdownPath(item.file, item);
+        return;
+    }
+
+    // Backwards compatibility with the old catalogue format.
     if (item.textFile) {
-        await openMarkdownFile(item);
+        await openMarkdownPath(item.textFile, item);
         return;
     }
 
     openText(item);
 }
 
-async function openMarkdownFile(item) {
+async function openMarkdownPath(path, item) {
 
     try {
-
-        const response = await fetch(item.textFile);
+        const response = await fetch(path);
 
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
@@ -88,17 +112,22 @@ async function openMarkdownFile(item) {
         });
 
     } catch (error) {
-
         openText({
             ...item,
             text:
                 `ARCHIVE READ ERROR\n\n` +
-                `${item.textFile}\n\n` +
+                `${path}\n\n` +
                 `${error.message}\n\n` +
                 `Run JIHANKI through a local HTTP server:\n` +
                 `python -m http.server 8000`,
         });
     }
+}
+
+// Kept as a compatibility wrapper for older code.
+async function openMarkdownFile(item) {
+    const path = item.documentation || item.file || item.textFile;
+    await openMarkdownPath(path, item);
 }
 
 function markdownToHTML(markdown) {
@@ -112,7 +141,6 @@ function markdownToHTML(markdown) {
 
     function flushParagraph() {
         if (!paragraph.length) return;
-
         html += `<p>${inlineMarkdown(paragraph.join(" "))}</p>`;
         paragraph = [];
     }
@@ -130,7 +158,6 @@ function markdownToHTML(markdown) {
     }
 
     for (const raw of lines) {
-
         const line = raw.trim();
 
         if (!line) {
@@ -150,9 +177,7 @@ function markdownToHTML(markdown) {
         if (heading) {
             flushParagraph();
             closeLists();
-
             const level = heading[1].length;
-
             html += `<h${level}>${inlineMarkdown(heading[2])}</h${level}>`;
             continue;
         }
@@ -160,7 +185,6 @@ function markdownToHTML(markdown) {
         const unordered = line.match(/^[-*]\s+(.*)$/);
 
         if (unordered) {
-
             flushParagraph();
 
             if (inOL) {
@@ -180,7 +204,6 @@ function markdownToHTML(markdown) {
         const ordered = line.match(/^\d+\.\s+(.*)$/);
 
         if (ordered) {
-
             flushParagraph();
 
             if (inUL) {
@@ -208,11 +231,8 @@ function markdownToHTML(markdown) {
 }
 
 function inlineMarkdown(text) {
-
     let value = escapeHTML(text);
-
     value = value.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
     value = value.replace(/\*(.+?)\*/g, "<em>$1</em>");
-
     return value;
 }
