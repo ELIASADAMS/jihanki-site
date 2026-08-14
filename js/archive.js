@@ -38,6 +38,8 @@ function showArchive(type) {
 }
 
 async function openArchiveItem(item) {
+    playSFX("button");
+
     if (item.type === "audio") return openAudio(item);
     if (item.type === "video") return openVideo(item);
     if (item.type === "image") return openPhoto(item);
@@ -51,7 +53,7 @@ async function openArchiveItem(item) {
 
 async function openMarkdownPath(path, item) {
     try {
-        const response = await fetch(path);
+        const response = await fetch(path, { cache: "no-cache" });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const markdown = await response.text();
@@ -96,16 +98,24 @@ function markdownToHTML(markdown, baseURL) {
 
     for (const raw of lines) {
         const line = raw.trim();
-        if (!line) { flushParagraph(); continue; }
 
-        if (/^---+$/.test(line)) {
-            flushParagraph(); closeLists(); html += "<hr>"; continue;
+        if (!line) {
+            flushParagraph();
+            continue;
         }
 
-        const heading = line.match(/^(#{1,3})\s+(.*)$/);
+        if (/^---+$/.test(line)) {
+            flushParagraph();
+            closeLists();
+            html += "<hr>";
+            continue;
+        }
+
+        const heading = line.match(/^(#{1,6})\s+(.*)$/);
         if (heading) {
-            flushParagraph(); closeLists();
-            const level = heading[1].length;
+            flushParagraph();
+            closeLists();
+            const level = Math.min(heading[1].length, 6);
             html += `<h${level}>${inlineMarkdown(heading[2], baseURL)}</h${level}>`;
             continue;
         }
@@ -138,29 +148,55 @@ function markdownToHTML(markdown, baseURL) {
 }
 
 function resolveMarkdownURL(path, baseURL) {
-    try { return new URL(path, baseURL).href; }
-    catch { return path; }
+    try {
+        return new URL(path, baseURL).href;
+    } catch {
+        return path;
+    }
 }
 
 function inlineMarkdown(text, baseURL) {
     let value = escapeHTML(text);
+    const tokens = [];
 
+    function token(html) {
+        const id = `@@JIHANKI_TOKEN_${tokens.length}@@`;
+        tokens.push(html);
+        return id;
+    }
+
+    // Protect images before normal links are processed.
     value = value.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, path) => {
         const src = resolveMarkdownURL(path, baseURL);
-        return `<img class="markdown-image" src="${src}" alt="${alt}">`;
+        return token(`<img class="markdown-image" src="${src}" alt="${alt}">`);
     });
 
-    value = value.replace(/\[([^\]]+)\]\(([^)]+\.(?:mp3|wav|ogg|m4a))\)/gi, (_, label, path) => {
+    // Audio files become actual playable controls.
+    value = value.replace(/\[([^\]]+)\]\(([^)]+\.(?:mp3|wav|ogg|m4a)(?:\?[^)]*)?)\)/gi, (_, label, path) => {
         const src = resolveMarkdownURL(path, baseURL);
-        return `<div class="markdown-audio"><div>${label}</div><audio controls preload="metadata" src="${src}"></audio></div>`;
+        return token(`
+            <div class="markdown-audio">
+                <div class="markdown-audio-label">${label}</div>
+                <audio controls preload="metadata" src="${src}"></audio>
+            </div>
+        `);
     });
 
+    // External/internal links, including Bandcamp.
     value = value.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, path) => {
-        const href = /^https?:\/\//i.test(path) ? path : resolveMarkdownURL(path, baseURL);
-        return `<a href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+        const href = /^https?:\/\//i.test(path)
+            ? path
+            : resolveMarkdownURL(path, baseURL);
+        return token(`<a href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`);
     });
 
+    value = value.replace(/`([^`]+)`/g, (_, code) => token(`<code>${code}</code>`));
+
+    // Strong before emphasis, so **bold** never becomes broken italic markup.
     value = value.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-    value = value.replace(/\*(.+?)\*/g, "<em>$1</em>");
-    return value;
+    value = value.replace(/__(.+?)__/g, "<strong>$1</strong>");
+    value = value.replace(/\*([^*\n]+?)\*/g, "<em>$1</em>");
+    value = value.replace(/_([^_\n]+?)_/g, "<em>$1</em>");
+
+    return value.replace(/@@JIHANKI_TOKEN_(\d+)@@/g, (_, index) => tokens[Number(index)]);
 }
