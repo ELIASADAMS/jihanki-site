@@ -1,9 +1,8 @@
-# FUJI / SONIC PI
+# エリ・ミニン / 青木ヶ原
 
-![FUJI / SONIC PI cover](../../media/photo/cover1.png)
+![エリ・ミニン / 青木ヶ原 cover](../../media/photo/cover1.png)
 
-**2026 / project**  
-**Eli / Fuji Sonic Pi**
+**2026 / project**
 
 A public archive of the Fuji Sonic Pi works: finished renders, short notes, and links to the final high-quality releases.
 
@@ -11,25 +10,25 @@ The Sonic Pi source code is intentionally not published here. JIHANKI stores the
 
 ---
 
-## 01 — RENDER
+## 01 — 青木ヶ原
 
 [▶ PLAY RENDER 01](../../media/music/fuji-sonicpi-01.mp3)
 
 Short description of the first piece.
 
-## 02 — RENDER
+## 02 — 西湖
 
 [▶ PLAY RENDER 02](../../media/music/fuji-sonicpi-02.mp3)
 
 Short description of the second piece.
 
-## 03 — RENDER
+## 03 — 村
 
 [▶ PLAY RENDER 03](../../media/music/fuji-sonicpi-03.mp3)
 
 Short description of the third piece.
 
-## 04 — RENDER
+## 04 — 富士山
 
 [▶ PLAY RENDER 04](../../media/music/fuji-sonicpi-04.mp3)
 
@@ -55,6 +54,6 @@ You can extend this page freely without changing the JIHANKI interface.
 
 ## CREDITS
 
-**Project:** Eli / Fuji Sonic Pi  
+**Project:** エリ・ミニン / 青木ヶ原 
 **Year:** 2026  
 **Archive:** JIHANKI

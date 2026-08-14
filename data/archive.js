@@ -116,7 +116,7 @@ const ARCHIVE = {
     projects: [
         {
             id: "fuji-sonicpi",
-            title: "FUJI / SONIC PI",
+            title: "エリ・ミニン / 青木ヶ原",
             date: "2026",
             type: "text",
             category: "project",
