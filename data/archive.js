@@ -1,19 +1,25 @@
 /*
     JIHANKI CATALOGUE
 
-    IMPORTANT:
-    This file contains metadata and paths only.
+    Canonical item format:
+      id       stable identifier
+      title    display name
+      date     date / era label
+      type     video | image | audio | text
+      category video | photo | note | yokai | music | sound | text | other
+      file     path to media/document
+
     Long text lives in documents/*.md.
 */
 
 const ARCHIVE = {
-
     videos: [
         {
             id: "eli-test-video",
             title: "ELI / TEST VIDEO",
             date: "TEST",
             type: "video",
+            category: "video",
             file: "media/video/eli.mp4"
         }
     ],
@@ -23,7 +29,8 @@ const ARCHIVE = {
             id: "cover1",
             title: "COVER 01",
             date: "TEST",
-            type: "photo",
+            type: "image",
+            category: "photo",
             file: "media/photo/cover1.png"
         }
     ],
@@ -34,21 +41,24 @@ const ARCHIVE = {
             title: "FIRST JIHANKI",
             date: "2026-07-22",
             type: "text",
-            textFile: "documents/notes/first-jihanki.md"
+            category: "note",
+            file: "documents/notes/first-jihanki.md"
         },
         {
             id: "archive-rotation",
             title: "ARCHIVE ROTATION",
             date: "2026",
             type: "text",
-            textFile: "documents/notes/archive-rotation.md"
+            category: "note",
+            file: "documents/notes/archive-rotation.md"
         },
         {
             id: "expedition-0722",
             title: "EXPEDITION 2026-07-22",
             date: "2026-07-22",
             type: "text",
-            textFile: "documents/notes/expedition-2026-07-22.md"
+            category: "note",
+            file: "documents/notes/expedition-2026-07-22.md"
         }
     ],
 
@@ -58,7 +68,8 @@ const ARCHIVE = {
             title: "富士山六体妖怪",
             date: "2026",
             type: "text",
-            textFile: "documents/yokai/fuji-six-yokai.md"
+            category: "yokai",
+            file: "documents/yokai/fuji-six-yokai.md"
         }
     ],
 
@@ -67,7 +78,8 @@ const ARCHIVE = {
             id: "moonlit-koto-curse",
             title: "Moonlit Koto Curse",
             date: "TEST",
-            type: "music",
+            type: "audio",
+            category: "music",
             file: "media/music/Moonlit%20Koto%20Curse.mp3",
             artist: "TEST"
         }
@@ -78,7 +90,8 @@ const ARCHIVE = {
             id: "hellyea",
             title: "HELLYEA",
             date: "TEST FIELD RECORDING",
-            type: "sound",
+            type: "audio",
+            category: "sound",
             file: "media/sound/hellyea.wav"
         }
     ],
@@ -89,7 +102,8 @@ const ARCHIVE = {
             title: "FUJI SIX YOKAI — SCRIPT",
             date: "2026",
             type: "text",
-            textFile: "documents/scripts/fuji-six-yokai-script.md"
+            category: "text",
+            file: "documents/scripts/fuji-six-yokai-script.md"
         }
     ],
 
@@ -99,9 +113,15 @@ const ARCHIVE = {
             title: "???",
             date: "UNINDEXED",
             type: "text",
-            text:
-                "This memory has not been catalogued yet.\n\n" +
-                "The archive contains something with no known category."
+            category: "other",
+            text: "This memory has not been catalogued yet.\n\nThe archive contains something with no known category."
         }
     ]
 };
+
+/* Flat catalogue for the UI loader. */
+const JIHANKI_ARCHIVE = Object.values(ARCHIVE).flat();
+
+/* Browser globals: keeps the catalogue usable by index.html and future pages. */
+window.ARCHIVE = ARCHIVE;
+window.JIHANKI_ARCHIVE = JIHANKI_ARCHIVE;
