@@ -42,7 +42,7 @@ function playSFX(name) {
 
     const sound = new Audio(src);
     sound.volume = name === "coin" ? 0.65 : 0.42;
-    sound.play().catch(() => {});
+    sound.play().catch(() => { });
 }
 
 function duckBackground() {
@@ -135,11 +135,10 @@ function openText(item) {
         <div class="artifact-title">${escapeHTML(item.title)}</div>
         <div class="artifact-meta">${escapeHTML(item.author || item.date || "")}</div>
         <div class="artifact-text">
-            ${
-                item.isHTML
-                    ? item.text
-                    : escapeHTML(item.text || "").replace(/\n/g, "<br>")
-            }
+            ${item.isHTML
+            ? item.text
+            : escapeHTML(item.text || "").replace(/\n/g, "<br>")
+        }
         </div>
     `;
 

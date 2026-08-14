@@ -2,21 +2,27 @@
     display: flex;
     justify-content: space-between;
     gap: 8px;
-    border-bottom: 1px solid rgba(255,255,255,.12);
+    border-bottom: 1px solid rgba(255, 255, 255, .12);
     padding-bottom: 5px;
     margin-bottom: 6px;
 }
 
-.archive-title { letter-spacing: .12em; }
-.archive-status { opacity: .35; font-size: .75em; }
+.archive-title {
+    letter-spacing: .12em;
+}
+
+.archive-status {
+    opacity: .35;
+    font-size: .75em;
+}
 
 .archive-item {
     display: block;
     width: 100%;
     border: 0;
-    border-bottom: 1px solid rgba(255,255,255,.06);
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
     background: transparent;
-    color: rgba(255,255,255,.7);
+    color: rgba(255, 255, 255, .7);
     text-align: left;
     padding: 7px 2px;
     cursor: pointer;
@@ -24,7 +30,10 @@
 }
 
 .archive-item:hover,
-.archive-item:active { background: rgba(255,255,255,.07); color: #fff; }
+.archive-item:active {
+    background: rgba(255, 255, 255, .07);
+    color: #fff;
+}
 
 .archive-item small {
     display: block;
@@ -40,18 +49,20 @@
     z-index: 50;
     display: none;
     padding: 5%;
-    background: rgba(0,0,0,.72);
+    background: rgba(0, 0, 0, .72);
 }
 
-.artifact.active { display: block; }
+.artifact.active {
+    display: block;
+}
 
 .artifact-window {
     position: relative;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background: rgba(7,7,7,.94);
-    border: 1px solid rgba(255,255,255,.16);
+    background: rgba(7, 7, 7, .94);
+    border: 1px solid rgba(255, 255, 255, .16);
     padding: 9%;
 }
 
@@ -61,14 +72,27 @@
     right: 7px;
     border: 0;
     background: transparent;
-    color: rgba(255,255,255,.55);
+    color: rgba(255, 255, 255, .55);
     cursor: pointer;
     font-size: 18px;
 }
 
-.artifact-title { font-size: 1.1em; letter-spacing: .12em; margin-bottom: 5px; }
-.artifact-meta { font-size: .7em; opacity: .35; margin-bottom: 14px; }
-.artifact-text { font-size: .9em; line-height: 1.7; }
+.artifact-title {
+    font-size: 1.1em;
+    letter-spacing: .12em;
+    margin-bottom: 5px;
+}
+
+.artifact-meta {
+    font-size: .7em;
+    opacity: .35;
+    margin-bottom: 14px;
+}
+
+.artifact-text {
+    font-size: .9em;
+    line-height: 1.7;
+}
 
 .artifact-text h1,
 .artifact-text h2,
@@ -82,19 +106,54 @@
     margin: 14px 0 7px;
 }
 
-.artifact-text h1 { font-size: 1.4em; }
-.artifact-text h2 { font-size: 1.15em; }
-.artifact-text h3 { font-size: 1em; }
-.artifact-text p { margin: 0 0 10px; }
-.artifact-text strong { font-weight: 700; color: rgba(255,255,255,.95); }
-.artifact-text em { font-style: italic; color: rgba(255,255,255,.78); }
-.artifact-text code { padding: 1px 4px; background: rgba(255,255,255,.06); }
-.artifact-text ul, .artifact-text ol { padding-left: 18px; }
-.artifact-text li { margin-bottom: 3px; }
-.artifact-text hr { border: 0; border-top: 1px solid rgba(255,255,255,.1); margin: 14px 0; }
+.artifact-text h1 {
+    font-size: 1.4em;
+}
+
+.artifact-text h2 {
+    font-size: 1.15em;
+}
+
+.artifact-text h3 {
+    font-size: 1em;
+}
+
+.artifact-text p {
+    margin: 0 0 10px;
+}
+
+.artifact-text strong {
+    font-weight: 700;
+    color: rgba(255, 255, 255, .95);
+}
+
+.artifact-text em {
+    font-style: italic;
+    color: rgba(255, 255, 255, .78);
+}
+
+.artifact-text code {
+    padding: 1px 4px;
+    background: rgba(255, 255, 255, .06);
+}
+
+.artifact-text ul,
+.artifact-text ol {
+    padding-left: 18px;
+}
+
+.artifact-text li {
+    margin-bottom: 3px;
+}
+
+.artifact-text hr {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, .1);
+    margin: 14px 0;
+}
 
 .artifact-text a {
-    color: rgba(255,255,255,.9);
+    color: rgba(255, 255, 255, .9);
     text-decoration: underline;
     text-underline-offset: 3px;
     cursor: pointer;
@@ -107,21 +166,21 @@
     object-fit: contain;
     margin: 0 0 18px;
     background: #000;
-    border: 1px solid rgba(255,255,255,.1);
+    border: 1px solid rgba(255, 255, 255, .1);
 }
 
 .markdown-audio {
     margin: 8px 0 18px;
     padding: 9px;
-    border: 1px solid rgba(255,255,255,.1);
-    background: rgba(255,255,255,.025);
+    border: 1px solid rgba(255, 255, 255, .1);
+    background: rgba(255, 255, 255, .025);
 }
 
 .markdown-audio-label {
     margin-bottom: 7px;
     font-size: .8em;
     letter-spacing: .08em;
-    color: rgba(255,255,255,.78);
+    color: rgba(255, 255, 255, .78);
 }
 
 .markdown-audio audio {
@@ -130,6 +189,21 @@
     height: 30px;
 }
 
-.artifact-audio { width: 100%; height: 28px; }
-.artifact-video { width: 100%; max-height: 72%; background: #000; }
-.artifact-photo { display: block; width: 100%; max-height: 72%; object-fit: contain; background: #000; }
+.artifact-audio {
+    width: 100%;
+    height: 28px;
+}
+
+.artifact-video {
+    width: 100%;
+    max-height: 72%;
+    background: #000;
+}
+
+.artifact-photo {
+    display: block;
+    width: 100%;
+    max-height: 72%;
+    object-fit: contain;
+    background: #000;
+}

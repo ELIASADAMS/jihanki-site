@@ -26,10 +26,10 @@ function showArchive(type) {
 
         const icon =
             item.type === "audio" ? "▶ " :
-            item.type === "video" ? "▣ " :
-            item.type === "image" ? "□ " :
-            item.category === "project" ? "△ " :
-            "· ";
+                item.type === "video" ? "▣ " :
+                    item.type === "image" ? "□ " :
+                        item.category === "project" ? "△ " :
+                            "· ";
 
         button.innerHTML = `${icon}${String(index + 1).padStart(2, "0")}&nbsp;${escapeHTML(item.title)}<small>${escapeHTML(item.author || "")} ${item.date ? " / " + item.date : ""}</small>`;
         button.addEventListener("click", () => openArchiveItem(item));
