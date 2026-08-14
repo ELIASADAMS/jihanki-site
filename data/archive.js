@@ -1,16 +1,20 @@
 /*
-    JIHANKI CATALOGUE
-
-    Canonical item format:
-      id       stable identifier
-      title    display name
-      date     date / era label
-      type     video | image | audio | text
-      category video | photo | note | yokai | music | sound | text | other
-      file     path to media/document
-
-    Long text lives in documents/*.md.
-*/
+ * JIHANKI CATALOGUE
+ *
+ * Add one object here whenever a new archive item is added.
+ * Long-form writing belongs in .md files; media belongs in media/.
+ *
+ * Canonical item fields:
+ * id       stable unique id
+ * title    display title
+ * date     date / era label
+ * type     video | image | audio | text | project
+ * category video | photo | note | yokai | music | sound | text | project | other
+ * author   eli | julia | shared
+ * project  optional project id, e.g. fuji-sonicpi
+ * file     local path OR markdown file
+ * link     optional external URL (e.g. Bandcamp)
+ */
 
 const ARCHIVE = {
     videos: [
@@ -20,6 +24,7 @@ const ARCHIVE = {
             date: "TEST",
             type: "video",
             category: "video",
+            author: "eli",
             file: "media/video/eli.mp4"
         }
     ],
@@ -31,6 +36,7 @@ const ARCHIVE = {
             date: "TEST",
             type: "image",
             category: "photo",
+            author: "shared",
             file: "media/photo/cover1.png"
         }
     ],
@@ -42,6 +48,7 @@ const ARCHIVE = {
             date: "2026-07-22",
             type: "text",
             category: "note",
+            author: "shared",
             file: "documents/notes/first-jihanki.md"
         },
         {
@@ -50,6 +57,7 @@ const ARCHIVE = {
             date: "2026",
             type: "text",
             category: "note",
+            author: "shared",
             file: "documents/notes/archive-rotation.md"
         },
         {
@@ -58,6 +66,7 @@ const ARCHIVE = {
             date: "2026-07-22",
             type: "text",
             category: "note",
+            author: "shared",
             file: "documents/notes/expedition-2026-07-22.md"
         }
     ],
@@ -69,6 +78,8 @@ const ARCHIVE = {
             date: "2026",
             type: "text",
             category: "yokai",
+            author: "eli",
+            project: "fuji-sonicpi",
             file: "documents/yokai/fuji-six-yokai.md"
         }
     ],
@@ -80,8 +91,8 @@ const ARCHIVE = {
             date: "TEST",
             type: "audio",
             category: "music",
-            file: "media/music/Moonlit%20Koto%20Curse.mp3",
-            artist: "TEST"
+            author: "eli",
+            file: "media/music/Moonlit%20Koto%20Curse.mp3"
         }
     ],
 
@@ -92,6 +103,7 @@ const ARCHIVE = {
             date: "TEST FIELD RECORDING",
             type: "audio",
             category: "sound",
+            author: "shared",
             file: "media/sound/hellyea.wav"
         }
     ],
@@ -103,25 +115,28 @@ const ARCHIVE = {
             date: "2026",
             type: "text",
             category: "text",
+            author: "eli",
+            project: "fuji-sonicpi",
             file: "documents/scripts/fuji-six-yokai-script.md"
         }
     ],
 
-    other: [
+    projects: [
         {
-            id: "unindexed",
-            title: "???",
-            date: "UNINDEXED",
-            type: "text",
-            category: "other",
-            text: "This memory has not been catalogued yet.\n\nThe archive contains something with no known category."
+            id: "fuji-sonicpi",
+            title: "FUJI / SONIC PI",
+            date: "2026",
+            type: "project",
+            category: "project",
+            author: "eli",
+            file: "fuji/index.html"
         }
-    ]
+    ],
+
+    other: []
 };
 
-/* Flat catalogue for the UI loader. */
 const JIHANKI_ARCHIVE = Object.values(ARCHIVE).flat();
 
-/* Browser globals: keeps the catalogue usable by index.html and future pages. */
 window.ARCHIVE = ARCHIVE;
 window.JIHANKI_ARCHIVE = JIHANKI_ARCHIVE;
