@@ -1,7 +1,4 @@
 function showArchive(type) {
-
-    // Projects are reachable through the existing OTHER slot.
-    // The physical vending-machine geometry stays unchanged.
     const baseItems = ARCHIVE[type] || [];
     const items = type === "other"
         ? [...baseItems, ...(ARCHIVE.projects || [])]
@@ -19,10 +16,7 @@ function showArchive(type) {
     const container = screenContent.querySelector(".archive");
 
     if (!items.length) {
-        container.insertAdjacentHTML(
-            "beforeend",
-            `<div class="screen-message">NO MEMORY FOUND</div>`
-        );
+        container.insertAdjacentHTML("beforeend", `<div class="screen-message">NO MEMORY FOUND</div>`);
         return;
     }
 
@@ -34,69 +28,23 @@ function showArchive(type) {
             item.type === "audio" ? "▶ " :
             item.type === "video" ? "▣ " :
             item.type === "image" ? "□ " :
-            item.type === "project" ? "△ " :
+            item.category === "project" ? "△ " :
             "· ";
 
-        button.innerHTML = `
-            ${icon}${String(index + 1).padStart(2, "0")}
-            &nbsp;${escapeHTML(item.title)}
-            <small>${escapeHTML(item.author || "")} ${item.date ? " / " + item.date : ""}</small>
-        `;
-
+        button.innerHTML = `${icon}${String(index + 1).padStart(2, "0")}&nbsp;${escapeHTML(item.title)}<small>${escapeHTML(item.author || "")} ${item.date ? " / " + item.date : ""}</small>`;
         button.addEventListener("click", () => openArchiveItem(item));
         container.appendChild(button);
     });
 }
 
 async function openArchiveItem(item) {
+    if (item.type === "audio") return openAudio(item);
+    if (item.type === "video") return openVideo(item);
+    if (item.type === "image") return openPhoto(item);
 
-    /*
-     * HTML is a PAGE, not a text document.
-     * This check deliberately happens before all Markdown/text handling.
-     * It also makes the loader tolerant of older catalogue entries that
-     * were accidentally marked as text.
-     */
-    const pagePath = item.page || item.file;
-
-    if (
-        item.type === "project" ||
-        (typeof pagePath === "string" && /\.html?(?:[?#].*)?$/i.test(pagePath))
-    ) {
-        window.location.href = pagePath;
-        return;
-    }
-
-    if (item.type === "audio") {
-        openAudio(item);
-        return;
-    }
-
-    if (item.type === "video") {
-        openVideo(item);
-        return;
-    }
-
-    if (item.type === "image") {
-        openPhoto(item);
-        return;
-    }
-
-    // Documentation is a Markdown file and is rendered inside JIHANKI.
-    if (item.documentation) {
-        await openMarkdownPath(item.documentation, item);
-        return;
-    }
-
-    if (item.file && /\.md$/i.test(item.file)) {
-        await openMarkdownPath(item.file, item);
-        return;
-    }
-
-    // Backwards compatibility with the old catalogue format.
-    if (item.textFile) {
-        await openMarkdownPath(item.textFile, item);
-        return;
-    }
+    if (item.documentation) return openMarkdownPath(item.documentation, item);
+    if (item.file && /\.md$/i.test(item.file)) return openMarkdownPath(item.file, item);
+    if (item.textFile) return openMarkdownPath(item.textFile, item);
 
     openText(item);
 }
@@ -104,41 +52,32 @@ async function openArchiveItem(item) {
 async function openMarkdownPath(path, item) {
     try {
         const response = await fetch(path);
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const markdown = await response.text();
+        const documentURL = new URL(path, window.location.href);
+        const baseURL = new URL("./", documentURL).href;
 
         openText({
             ...item,
-            text: markdownToHTML(markdown),
+            text: markdownToHTML(markdown, baseURL),
             isHTML: true
         });
-
     } catch (error) {
         openText({
             ...item,
-            text:
-                `ARCHIVE READ ERROR\n\n` +
-                `${path}\n\n` +
-                `${error.message}\n\n` +
-                `Run JIHANKI through a local HTTP server:\n` +
-                `python -m http.server 8000`,
+            text: `ARCHIVE READ ERROR\n\n${path}\n\n${error.message}`
         });
     }
 }
 
-// Compatibility wrapper for older code.
 async function openMarkdownFile(item) {
     const path = item.documentation || item.file || item.textFile;
     await openMarkdownPath(path, item);
 }
 
-function markdownToHTML(markdown) {
+function markdownToHTML(markdown, baseURL) {
     const lines = markdown.replace(/\r\n/g, "\n").split("\n");
-
     let html = "";
     let paragraph = [];
     let inUL = false;
@@ -146,72 +85,46 @@ function markdownToHTML(markdown) {
 
     function flushParagraph() {
         if (!paragraph.length) return;
-        html += `<p>${inlineMarkdown(paragraph.join(" "))}</p>`;
+        html += `<p>${inlineMarkdown(paragraph.join(" "), baseURL)}</p>`;
         paragraph = [];
     }
 
     function closeLists() {
-        if (inUL) {
-            html += "</ul>";
-            inUL = false;
-        }
-        if (inOL) {
-            html += "</ol>";
-            inOL = false;
-        }
+        if (inUL) { html += "</ul>"; inUL = false; }
+        if (inOL) { html += "</ol>"; inOL = false; }
     }
 
     for (const raw of lines) {
         const line = raw.trim();
-
-        if (!line) {
-            flushParagraph();
-            continue;
-        }
+        if (!line) { flushParagraph(); continue; }
 
         if (/^---+$/.test(line)) {
-            flushParagraph();
-            closeLists();
-            html += "<hr>";
-            continue;
+            flushParagraph(); closeLists(); html += "<hr>"; continue;
         }
 
         const heading = line.match(/^(#{1,3})\s+(.*)$/);
         if (heading) {
-            flushParagraph();
-            closeLists();
+            flushParagraph(); closeLists();
             const level = heading[1].length;
-            html += `<h${level}>${inlineMarkdown(heading[2])}</h${level}>`;
+            html += `<h${level}>${inlineMarkdown(heading[2], baseURL)}</h${level}>`;
             continue;
         }
 
         const unordered = line.match(/^[-*]\s+(.*)$/);
         if (unordered) {
             flushParagraph();
-            if (inOL) {
-                html += "</ol>";
-                inOL = false;
-            }
-            if (!inUL) {
-                html += "<ul>";
-                inUL = true;
-            }
-            html += `<li>${inlineMarkdown(unordered[1])}</li>`;
+            if (inOL) { html += "</ol>"; inOL = false; }
+            if (!inUL) { html += "<ul>"; inUL = true; }
+            html += `<li>${inlineMarkdown(unordered[1], baseURL)}</li>`;
             continue;
         }
 
         const ordered = line.match(/^\d+\.\s+(.*)$/);
         if (ordered) {
             flushParagraph();
-            if (inUL) {
-                html += "</ul>";
-                inUL = false;
-            }
-            if (!inOL) {
-                html += "<ol>";
-                inOL = true;
-            }
-            html += `<li>${inlineMarkdown(ordered[1])}</li>`;
+            if (inUL) { html += "</ul>"; inUL = false; }
+            if (!inOL) { html += "<ol>"; inOL = true; }
+            html += `<li>${inlineMarkdown(ordered[1], baseURL)}</li>`;
             continue;
         }
 
@@ -224,8 +137,29 @@ function markdownToHTML(markdown) {
     return html;
 }
 
-function inlineMarkdown(text) {
+function resolveMarkdownURL(path, baseURL) {
+    try { return new URL(path, baseURL).href; }
+    catch { return path; }
+}
+
+function inlineMarkdown(text, baseURL) {
     let value = escapeHTML(text);
+
+    value = value.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, path) => {
+        const src = resolveMarkdownURL(path, baseURL);
+        return `<img class="markdown-image" src="${src}" alt="${alt}">`;
+    });
+
+    value = value.replace(/\[([^\]]+)\]\(([^)]+\.(?:mp3|wav|ogg|m4a))\)/gi, (_, label, path) => {
+        const src = resolveMarkdownURL(path, baseURL);
+        return `<div class="markdown-audio"><div>${label}</div><audio controls preload="metadata" src="${src}"></audio></div>`;
+    });
+
+    value = value.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, path) => {
+        const href = /^https?:\/\//i.test(path) ? path : resolveMarkdownURL(path, baseURL);
+        return `<a href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+    });
+
     value = value.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
     value = value.replace(/\*(.+?)\*/g, "<em>$1</em>");
     return value;
