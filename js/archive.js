@@ -1,7 +1,7 @@
 function showArchive(type) {
 
-    // Projects are intentionally reachable through the existing OTHER slot.
-    // This keeps the physical vending-machine geometry unchanged.
+    // Projects are reachable through the existing OTHER slot.
+    // The physical vending-machine geometry stays unchanged.
     const baseItems = ARCHIVE[type] || [];
     const items = type === "other"
         ? [...baseItems, ...(ARCHIVE.projects || [])]
@@ -27,7 +27,6 @@ function showArchive(type) {
     }
 
     items.forEach((item, index) => {
-
         const button = document.createElement("button");
         button.className = "archive-item";
 
@@ -45,17 +44,25 @@ function showArchive(type) {
         `;
 
         button.addEventListener("click", () => openArchiveItem(item));
-
         container.appendChild(button);
     });
 }
 
 async function openArchiveItem(item) {
 
-    // HTML project pages must be opened as pages, never fetched and displayed
-    // as text. This is what caused fuji/index.html to appear as raw source.
-    if (item.type === "project") {
-        window.location.href = item.file;
+    /*
+     * HTML is a PAGE, not a text document.
+     * This check deliberately happens before all Markdown/text handling.
+     * It also makes the loader tolerant of older catalogue entries that
+     * were accidentally marked as text.
+     */
+    const pagePath = item.page || item.file;
+
+    if (
+        item.type === "project" ||
+        (typeof pagePath === "string" && /\.html?(?:[?#].*)?$/i.test(pagePath))
+    ) {
+        window.location.href = pagePath;
         return;
     }
 
@@ -95,7 +102,6 @@ async function openArchiveItem(item) {
 }
 
 async function openMarkdownPath(path, item) {
-
     try {
         const response = await fetch(path);
 
@@ -124,14 +130,13 @@ async function openMarkdownPath(path, item) {
     }
 }
 
-// Kept as a compatibility wrapper for older code.
+// Compatibility wrapper for older code.
 async function openMarkdownFile(item) {
     const path = item.documentation || item.file || item.textFile;
     await openMarkdownPath(path, item);
 }
 
 function markdownToHTML(markdown) {
-
     const lines = markdown.replace(/\r\n/g, "\n").split("\n");
 
     let html = "";
@@ -150,7 +155,6 @@ function markdownToHTML(markdown) {
             html += "</ul>";
             inUL = false;
         }
-
         if (inOL) {
             html += "</ol>";
             inOL = false;
@@ -173,7 +177,6 @@ function markdownToHTML(markdown) {
         }
 
         const heading = line.match(/^(#{1,3})\s+(.*)$/);
-
         if (heading) {
             flushParagraph();
             closeLists();
@@ -183,39 +186,31 @@ function markdownToHTML(markdown) {
         }
 
         const unordered = line.match(/^[-*]\s+(.*)$/);
-
         if (unordered) {
             flushParagraph();
-
             if (inOL) {
                 html += "</ol>";
                 inOL = false;
             }
-
             if (!inUL) {
                 html += "<ul>";
                 inUL = true;
             }
-
             html += `<li>${inlineMarkdown(unordered[1])}</li>`;
             continue;
         }
 
         const ordered = line.match(/^\d+\.\s+(.*)$/);
-
         if (ordered) {
             flushParagraph();
-
             if (inUL) {
                 html += "</ul>";
                 inUL = false;
             }
-
             if (!inOL) {
                 html += "<ol>";
                 inOL = true;
             }
-
             html += `<li>${inlineMarkdown(ordered[1])}</li>`;
             continue;
         }
@@ -226,7 +221,6 @@ function markdownToHTML(markdown) {
 
     flushParagraph();
     closeLists();
-
     return html;
 }
 
