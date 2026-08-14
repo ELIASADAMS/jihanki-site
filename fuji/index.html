@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>FUJI — SONIC PI PROJECT</title>
+    <style>
+        * { box-sizing: border-box; }
+        html, body { margin: 0; min-height: 100%; }
+        body {
+            background: #080808;
+            color: #d8d8d8;
+            font-family: "Courier New", monospace;
+        }
+        a { color: inherit; }
+        .page {
+            width: min(1100px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 42px 0 80px;
+        }
+        .back {
+            display: inline-block;
+            margin-bottom: 45px;
+            color: #777;
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: .12em;
+        }
+        .back:hover { color: #fff; }
+        header {
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            padding: 24px 0;
+            margin-bottom: 36px;
+        }
+        .kicker {
+            color: #666;
+            font-size: 11px;
+            letter-spacing: .2em;
+            margin-bottom: 14px;
+        }
+        h1 {
+            margin: 0;
+            font-size: clamp(28px, 7vw, 62px);
+            font-weight: 400;
+            letter-spacing: .08em;
+        }
+        .jp {
+            margin-top: 10px;
+            font-family: serif;
+            font-size: 22px;
+            color: #aaa;
+        }
+        .intro {
+            max-width: 720px;
+            color: #999;
+            line-height: 1.8;
+            font-size: 14px;
+            margin-bottom: 48px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 12px;
+        }
+        .card {
+            min-height: 150px;
+            padding: 20px;
+            border: 1px solid #292929;
+            background: #0d0d0d;
+            text-decoration: none;
+            transition: border-color .15s, background .15s;
+        }
+        .card:hover {
+            border-color: #666;
+            background: #121212;
+        }
+        .num { color: #555; font-size: 11px; }
+        .card h2 {
+            margin: 20px 0 9px;
+            font-size: 16px;
+            font-weight: 400;
+        }
+        .card p {
+            margin: 0;
+            color: #777;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+        section {
+            margin-top: 60px;
+            padding-top: 25px;
+            border-top: 1px solid #252525;
+        }
+        h3 {
+            margin: 0 0 20px;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: .15em;
+        }
+        .note {
+            color: #888;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+        code {
+            color: #bbb;
+            background: #111;
+            padding: 2px 5px;
+        }
+        footer {
+            margin-top: 70px;
+            color: #444;
+            font-size: 10px;
+        }
+        @media (max-width: 600px) {
+            .page { width: min(100% - 22px, 1100px); padding-top: 25px; }
+            .grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 390px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <a class="back" href="../">← RETURN TO JIHANKI</a>
+
+    <header>
+        <div class="kicker">FIELD / MOUNTAIN / GENERATIVE SOUND</div>
+        <h1>FUJI</h1>
+        <div class="jp">富士山 — SONIC PI</div>
+    </header>
+
+    <p class="intro">
+        A separate workspace for the Fuji sonic project: Sonic Pi patches,
+        rendered pieces, field recordings, musical works, and notes explaining
+        how the system relates to the mountain, ritual, memory, and the JIHANKI archive.
+    </p>
+
+    <div class="grid">
+        <a class="card" href="../sonicpi/fuji/">
+            <div class="num">01 / SOURCE</div>
+            <h2>SONIC PI PATCHES</h2>
+            <p>Source code and generative experiments for the Fuji project.</p>
+        </a>
+
+        <a class="card" href="../media/music/">
+            <div class="num">02 / MUSIC</div>
+            <h2>SONGS &amp; RENDERS</h2>
+            <p>Finished songs, Sonic Pi renders, and related musical material.</p>
+        </a>
+
+        <a class="card" href="../media/sound/">
+            <div class="num">03 / FIELD</div>
+            <h2>FIELD RECORDINGS</h2>
+            <p>Sounds gathered around Fuji, Saiko, shrines, tunnels, and roads.</p>
+        </a>
+
+        <a class="card" href="../documents/yokai/fuji-six-yokai.md">
+            <div class="num">04 / YOKAI</div>
+            <h2>FUJI SIX YOKAI</h2>
+            <p>The fictional yokai project and its written source material.</p>
+        </a>
+
+        <a class="card" href="../documents/">
+            <div class="num">05 / NOTES</div>
+            <h2>DOCUMENTATION</h2>
+            <p>Notes, scripts, concepts, and explanations connected to the project.</p>
+        </a>
+
+        <a class="card" href="../">
+            <div class="num">06 / ARCHIVE</div>
+            <h2>JIHANKI</h2>
+            <p>Return to the memory vending machine and the complete archive.</p>
+        </a>
+    </div>
+
+    <section>
+        <h3>PROJECT STRUCTURE</h3>
+        <div class="note">
+            The Fuji page is intentionally separate from the vending-machine UI.
+            JIHANKI is the archive interface; FUJI is a project workspace.
+            Future Sonic Pi renders can be catalogued in <code>data/archive.js</code>
+            and stored under <code>media/music/</code> or a dedicated render folder.
+        </div>
+    </section>
+
+    <footer>
+        JIHANKI / FUJI / 2026
+    </footer>
+</div>
+</body>
+</html>
