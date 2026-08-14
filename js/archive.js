@@ -160,18 +160,18 @@ function inlineMarkdown(text, baseURL) {
     const tokens = [];
 
     function token(html) {
-        const id = `@@JIHANKI_TOKEN_${tokens.length}@@`;
+        // Deliberately contains no * or _ characters so emphasis parsing
+        // cannot touch the placeholder.
+        const id = `@@JHKT${tokens.length}@@`;
         tokens.push(html);
         return id;
     }
 
-    // Protect images before normal links are processed.
     value = value.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, path) => {
         const src = resolveMarkdownURL(path, baseURL);
         return token(`<img class="markdown-image" src="${src}" alt="${alt}">`);
     });
 
-    // Audio files become actual playable controls.
     value = value.replace(/\[([^\]]+)\]\(([^)]+\.(?:mp3|wav|ogg|m4a)(?:\?[^)]*)?)\)/gi, (_, label, path) => {
         const src = resolveMarkdownURL(path, baseURL);
         return token(`
@@ -182,7 +182,6 @@ function inlineMarkdown(text, baseURL) {
         `);
     });
 
-    // External/internal links, including Bandcamp.
     value = value.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, path) => {
         const href = /^https?:\/\//i.test(path)
             ? path
@@ -192,11 +191,10 @@ function inlineMarkdown(text, baseURL) {
 
     value = value.replace(/`([^`]+)`/g, (_, code) => token(`<code>${code}</code>`));
 
-    // Strong before emphasis, so **bold** never becomes broken italic markup.
     value = value.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
     value = value.replace(/__(.+?)__/g, "<strong>$1</strong>");
     value = value.replace(/\*([^*\n]+?)\*/g, "<em>$1</em>");
     value = value.replace(/_([^_\n]+?)_/g, "<em>$1</em>");
 
-    return value.replace(/@@JIHANKI_TOKEN_(\d+)@@/g, (_, index) => tokens[Number(index)]);
+    return value.replace(/@@JHKT(\d+)@@/g, (_, index) => tokens[Number(index)]);
 }
