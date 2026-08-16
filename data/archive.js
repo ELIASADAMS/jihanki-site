@@ -24,6 +24,17 @@ const DAILY_NOTES = [
     file: `documents/notes/daily/${date}.md`
 }));
 
+const AOKIGAHARA_DOSSIER = {
+    id: "aokigahara-dossier",
+    title: "AOKIGAHARA — PROCEDURAL AMBIENT PENTALOGY",
+    date: "2026",
+    type: "project",
+    category: "project",
+    author: "eli",
+    project: "aokigahara",
+    file: "projects/aokigahara/index.html"
+};
+
 const ARCHIVE = {
     videos: [{ id:"eli-test-video", title:"DOCUMENTATION / JULIA BARANYUK", date:"2026", type:"video", category:"video", author:"julia", file:"media/video/eli.mp4" }],
     photos: [{ id:"cover1", title:"COVER 01", date:"TEST", type:"image", category:"photo", author:"shared", file:"media/photo/cover1.png" }],
@@ -36,8 +47,11 @@ const ARCHIVE = {
     yokai: [{ id:"fuji-six-yokai", title:"富士山六体妖怪", date:"2026", type:"text", category:"yokai", author:"eli", project:"fuji-yokai", file:"documents/yokai/fuji-six-yokai.md" }],
     music: [{ id:"moonlit-koto-curse", title:"Moonlit Koto Curse", date:"TEST", type:"audio", category:"music", author:"eli", file:"media/music/Moonlit%20Koto%20Curse.mp3" }],
     sound: [{ id:"hellyea", title:"HELLYEA", date:"TEST FIELD RECORDING", type:"audio", category:"sound", author:"shared", file:"media/sound/hellyea.wav" }],
-    text: [{ id:"fuji-six-yokai-script", title:"FUJI SIX YOKAI — SCRIPT", date:"2026", type:"text", category:"text", author:"eli", project:"fuji-yokai", file:"documents/scripts/fuji-six-yokai-script.md" }],
-    projects: [{ id:"fuji-sonicpi", title:"エリ・ミニン / 青木ヶ原", date:"2026", type:"text", category:"project", author:"eli", project:"fuji-sonicpi", file:"documents/projects/fuji-sonicpi.md" }],
+    text: [
+        { id:"fuji-six-yokai-script", title:"FUJI SIX YOKAI — SCRIPT", date:"2026", type:"text", category:"text", author:"eli", project:"fuji-yokai", file:"documents/scripts/fuji-six-yokai-script.md" },
+        AOKIGAHARA_DOSSIER
+    ],
+    projects: [AOKIGAHARA_DOSSIER],
     other: []
 };
 
@@ -56,6 +70,7 @@ archiveStyle.textContent = `
 .markdown-rendered{overflow-wrap:anywhere}.markdown-rendered strong{font-weight:700}.markdown-rendered em{font-style:italic}.markdown-rendered p{margin:0 0 14px}
 .markdown-rendered h1,.markdown-rendered h2,.markdown-rendered h3{margin:18px 0 9px;line-height:1.25}.markdown-rendered ul,.markdown-rendered ol{padding-left:22px;margin:0 0 14px}.markdown-rendered li{margin:4px 0}.markdown-rendered hr{border:0;border-top:1px solid rgba(255,255,255,.12);margin:18px 0}
 .markdown-image{display:block;max-width:100%;max-height:300px;object-fit:contain;margin:0 0 16px}.markdown-audio{margin:10px 0 18px}.markdown-audio-label{margin-bottom:6px}.markdown-audio audio{width:100%}.markdown-link{color:inherit;text-decoration:underline}
+.project-frame{display:block;width:100%;height:min(72vh,760px);border:1px solid rgba(255,255,255,.10);background:#050505}
 `;
 document.head.appendChild(archiveStyle);
 
@@ -74,6 +89,11 @@ document.head.appendChild(archiveStyle);
     function markdownToHTML(markdown,base){const lines=String(markdown).replace(/\r\n?/g,"\n").split("\n");let html="",paragraph=[],list=null;const flush=()=>{if(paragraph.length){html+=`<p>${inlineMD(paragraph.join(" "),base)}</p>`;paragraph=[]}};const close=()=>{if(list)html+=`</${list}>`;list=null};for(const raw of lines){const line=raw.trim();if(!line){flush();close();continue}if(/^---+$/.test(line)){flush();close();html+="<hr>";continue}const h=line.match(/^(#{1,6})\s+(.*)$/);if(h){flush();close();const n=h[1].length;html+=`<h${n}>${inlineMD(h[2],base)}</h${n}>`;continue}const u=line.match(/^[-*+]\s+(.*)$/);if(u){flush();if(list!=="ul"){close();html+="<ul>";list="ul"}html+=`<li>${inlineMD(u[1],base)}</li>`;continue}const o=line.match(/^\d+\.\s+(.*)$/);if(o){flush();if(list!=="ol"){close();html+="<ol>";list="ol"}html+=`<li>${inlineMD(o[1],base)}</li>`;continue}close();paragraph.push(line)}flush();close();return html}
     function bindAudio(){document.querySelectorAll("#artifact-body audio").forEach(a=>{a.addEventListener("play",()=>{foreground=a;muteAmbient(true)});a.addEventListener("pause",()=>{if(foreground===a)muteAmbient(false)});a.addEventListener("ended",()=>{if(foreground===a){foreground=null;muteAmbient(false)}})})}
     async function openMarkdown(item,body){try{const r=await fetch(item.file,{cache:"no-cache"});if(!r.ok)throw new Error(`HTTP ${r.status}`);const md=await r.text(),doc=new URL(item.file,location.href),base=new URL("./",doc).href;body.innerHTML=`<div class="artifact-text markdown-rendered">${markdownToHTML(md,base)}</div>`;bindAudio()}catch(e){body.innerHTML=`<div class="artifact-text"><strong>MEMORY COULD NOT BE READ.</strong><br><br>${escapeHTML(item.file)}<br>${escapeHTML(e.message)}</div>`}}
-    window.openItem=async function(item){if(!item)return;sfx("button");stopForeground();startLoop();const artifact=document.getElementById("artifact"),content=document.getElementById("artifact-content");if(!artifact||!content)return;const title=escapeHTML(item.title||"UNTITLED"),meta=[item.author,item.date,item.category||item.type].filter(Boolean).map(escapeHTML).join(" / ");content.innerHTML=`<h1 class="artifact-title">${title}</h1><div class="artifact-meta">${meta}</div><div id="artifact-body">LOADING MEMORY...</div>`;artifact.classList.add("open");artifact.setAttribute("aria-hidden","false");const body=document.getElementById("artifact-body"),type=String(item.type||item.category||"").toLowerCase(),file=item.file||"",ext=file.split("?")[0].split(".").pop().toLowerCase();if(type==="image"||type==="photo"||/^(png|jpe?g|webp|gif)$/.test(ext)){body.innerHTML=`<img class="artifact-media" src="${escapeHTML(file)}" alt="${title}">`;return}if(type==="audio"||type==="music"||type==="sound"||/^(mp3|wav|ogg|m4a|aac|flac)$/.test(ext)){body.innerHTML=`<audio class="artifact-audio" controls autoplay playsinline src="${escapeHTML(file)}"></audio>`;foreground=body.querySelector("audio");muteAmbient(true);foreground.addEventListener("play",()=>muteAmbient(true));foreground.addEventListener("pause",()=>muteAmbient(false));foreground.addEventListener("ended",()=>{foreground=null;muteAmbient(false)});return}if(type==="video"||/^(mp4|webm|mov)$/.test(ext)){body.innerHTML=`<video class="artifact-video" controls autoplay playsinline src="${escapeHTML(file)}"></video>`;foreground=body.querySelector("video");muteAmbient(true);foreground.addEventListener("play",()=>muteAmbient(true));foreground.addEventListener("pause",()=>muteAmbient(false));foreground.addEventListener("ended",()=>{foreground=null;muteAmbient(false)});return}await openMarkdown(item,body)};
+    window.openItem=async function(item){if(!item)return;sfx("button");stopForeground();startLoop();const artifact=document.getElementById("artifact"),content=document.getElementById("artifact-content");if(!artifact||!content)return;const title=escapeHTML(item.title||"UNTITLED"),meta=[item.author,item.date,item.category||item.type].filter(Boolean).map(escapeHTML).join(" / ");content.innerHTML=`<h1 class="artifact-title">${title}</h1><div class="artifact-meta">${meta}</div><div id="artifact-body">LOADING MEMORY...</div>`;artifact.classList.add("open");artifact.setAttribute("aria-hidden","false");const body=document.getElementById("artifact-body"),type=String(item.type||item.category||"").toLowerCase(),file=item.file||"",ext=file.split("?")[0].split(".").pop().toLowerCase();
+        if(type==="project"){body.innerHTML=`<iframe class="project-frame" src="${escapeHTML(file)}" title="${title}" loading="eager"></iframe>`;return}
+        if(type==="image"||type==="photo"||/^(png|jpe?g|webp|gif)$/.test(ext)){body.innerHTML=`<img class="artifact-media" src="${escapeHTML(file)}" alt="${title}">`;return}
+        if(type==="audio"||type==="music"||type==="sound"||/^(mp3|wav|ogg|m4a|aac|flac)$/.test(ext)){body.innerHTML=`<audio class="artifact-audio" controls autoplay playsinline src="${escapeHTML(file)}"></audio>`;foreground=body.querySelector("audio");muteAmbient(true);foreground.addEventListener("play",()=>muteAmbient(true));foreground.addEventListener("pause",()=>muteAmbient(false));foreground.addEventListener("ended",()=>{foreground=null;muteAmbient(false)});return}
+        if(type==="video"||/^(mp4|webm|mov)$/.test(ext)){body.innerHTML=`<video class="artifact-video" controls autoplay playsinline src="${escapeHTML(file)}"></video>`;foreground=body.querySelector("video");muteAmbient(true);foreground.addEventListener("play",()=>muteAmbient(true));foreground.addEventListener("pause",()=>muteAmbient(false));foreground.addEventListener("ended",()=>{foreground=null;muteAmbient(false)});return}
+        await openMarkdown(item,body)};
     document.addEventListener("pointerdown",e=>{startLoop();const b=e.target.closest&&e.target.closest("button");if(!b)return;if(b.id==="coin-button")sfx("coin");else if(b.id==="home-button")sfx("home");else sfx("button")},{passive:true});document.addEventListener("keydown",()=>startLoop(),{passive:true});window.JIHANKI_AUDIO={start:startLoop,mute:()=>muteAmbient(true),unmute:()=>muteAmbient(false)};
 })();
