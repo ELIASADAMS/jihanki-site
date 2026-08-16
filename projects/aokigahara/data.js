@@ -8,11 +8,10 @@ window.AOKIGAHARA = {
   phase: "PROCEDURAL DEVELOPMENT",
 
   environments: [
-    { id: "fujisan", title: "FUJISAN", time: "GEOLOGICAL", description: "Mass, pressure and extremely slow transformation.", render: "renders/01-fujisan.mp3" },
-    { id: "aokigahara", title: "AOKIGAHARA", time: "BIOLOGICAL", description: "Growth, density, decay and environmental memory.", render: "renders/02-aokigahara.mp3" },
-    { id: "saiko", title: "SAIKO", time: "REFLECTIVE", description: "Water, echoes, distance and returning memory.", render: "renders/03-saiko.mp3" },
-    { id: "village", title: "VILLAGE", time: "SOCIAL", description: "Human traces, infrastructure and abandoned routines.", render: "renders/04-village.mp3" },
-    { id: "shrine", title: "SHRINE", time: "RITUAL", description: "Recurrence, ceremony and the Kagura Machine.", render: "renders/05-shrine.mp3" }
+    { id: "render-01", title: "RENDER 01", time: "SONIC PI", description: "First public procedural render.", render: "../../media/music/fuji-sonicpi-01.mp3" },
+    { id: "render-02", title: "RENDER 02", time: "SONIC PI", description: "Second public procedural render.", render: "../../media/music/fuji-sonicpi-02.mp3" },
+    { id: "render-03", title: "RENDER 03", time: "SONIC PI", description: "Third public procedural render.", render: "../../media/music/fuji-sonicpi-03.mp3" },
+    { id: "render-04", title: "RENDER 04", time: "SONIC PI", description: "Fourth public procedural render.", render: "../../media/music/fuji-sonicpi-04.mp3" }
   ],
 
   state: [
