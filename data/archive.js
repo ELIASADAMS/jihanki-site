@@ -36,7 +36,10 @@ const ARCHIVE = {
     yokai: [{ id:"fuji-six-yokai", title:"富士山六体妖怪", date:"2026", type:"text", category:"yokai", author:"eli", project:"fuji-yokai", file:"documents/yokai/fuji-six-yokai.md" }],
     music: [{ id:"moonlit-koto-curse", title:"Moonlit Koto Curse", date:"TEST", type:"audio", category:"music", author:"eli", file:"media/music/Moonlit%20Koto%20Curse.mp3" }],
     sound: [{ id:"hellyea", title:"HELLYEA", date:"TEST FIELD RECORDING", type:"audio", category:"sound", author:"shared", file:"media/sound/hellyea.wav" }],
-    text: [{ id:"fuji-six-yokai-script", title:"FUJI SIX YOKAI — SCRIPT", date:"2026", type:"text", category:"text", author:"eli", project:"fuji-yokai", file:"documents/scripts/fuji-six-yokai-script.md" }],
+    text: [
+        { id:"fuji-six-yokai-script", title:"FUJI SIX YOKAI — SCRIPT", date:"2026", type:"text", category:"text", author:"eli", project:"fuji-yokai", file:"documents/scripts/fuji-six-yokai-script.md" },
+        { id:"aokigahara-project", title:"AOKIGAHARA — PROCEDURAL AMBIENT PENTALOGY", date:"2026", type:"text", category:"text", author:"eli", project:"aokigahara", file:"documents/projects/aokigahara.md" }
+    ],
     projects: [{ id:"fuji-sonicpi", title:"エリ・ミニン / 青木ヶ原", date:"2026", type:"text", category:"project", author:"eli", project:"fuji-sonicpi", file:"documents/projects/fuji-sonicpi.md" }],
     other: []
 };
@@ -56,6 +59,29 @@ archiveStyle.textContent = `
 .markdown-rendered{overflow-wrap:anywhere}.markdown-rendered strong{font-weight:700}.markdown-rendered em{font-style:italic}.markdown-rendered p{margin:0 0 14px}
 .markdown-rendered h1,.markdown-rendered h2,.markdown-rendered h3{margin:18px 0 9px;line-height:1.25}.markdown-rendered ul,.markdown-rendered ol{padding-left:22px;margin:0 0 14px}.markdown-rendered li{margin:4px 0}.markdown-rendered hr{border:0;border-top:1px solid rgba(255,255,255,.12);margin:18px 0}
 .markdown-image{display:block;max-width:100%;max-height:300px;object-fit:contain;margin:0 0 16px}.markdown-audio{margin:10px 0 18px}.markdown-audio-label{margin-bottom:6px}.markdown-audio audio{width:100%}.markdown-link{color:inherit;text-decoration:underline}
+
+/* JIHANKI-style archive media: dark, squared, restrained and monochrome. */
+#artifact-body audio.artifact-audio,
+#artifact-body video.artifact-video,
+#artifact-body .markdown-audio audio{
+    display:block;
+    width:100%;
+    max-width:620px;
+    margin:18px auto;
+    padding:7px;
+    border:1px solid rgba(255,255,255,.13);
+    border-radius:0;
+    background:#050505;
+    filter:grayscale(1) contrast(.92);
+    box-shadow:inset 0 0 18px rgba(255,255,255,.025),0 0 16px rgba(0,0,0,.65);
+}
+#artifact-body audio.artifact-audio{height:46px}
+#artifact-body video.artifact-video{max-height:65vh;object-fit:contain}
+#artifact-body .markdown-audio{margin:18px 0;padding:10px 12px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025)}
+#artifact-body .markdown-audio-label{font-size:10px;letter-spacing:.10em;color:#aaa;margin-bottom:7px}
+#artifact-body audio::-webkit-media-controls-panel,#artifact-body video::-webkit-media-controls-panel{background:#111}
+#artifact-body audio::-webkit-media-controls-current-time-display,#artifact-body audio::-webkit-media-controls-time-remaining-display{color:#aaa}
+#artifact-body .artifact-media{display:block;max-width:100%;max-height:65vh;margin:16px auto;border:1px solid rgba(255,255,255,.12);filter:grayscale(.2) contrast(.95)}
 `;
 document.head.appendChild(archiveStyle);
 
@@ -70,7 +96,7 @@ document.head.appendChild(archiveStyle);
     function stopForeground(){if(foreground){try{foreground.pause()}catch(_){}foreground=null}muteAmbient(false)}
     function escapeHTML(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
     function safeURL(path,base){const raw=String(path||"").trim();if(/^(javascript|data):/i.test(raw))return "#";try{return new URL(raw,base).href}catch(_){return raw}}
-    function inlineMD(text,base){let s=escapeHTML(text),tokens=[];const token=x=>{const id=`@@JIHIKI${tokens.length}@@`;tokens.push(x);return id};s=s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,(_,alt,p)=>token(`<img class="markdown-image" src="${escapeHTML(safeURL(p,base))}" alt="${escapeHTML(alt)}">`));s=s.replace(/\[([^\]]+)\]\(([^)]+)\)/g,(_,label,p)=>{const href=safeURL(p,base),lower=p.split("?")[0].toLowerCase();if(/\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(lower))return token(`<div class="markdown-audio"><div class="markdown-audio-label">${label}</div><audio controls preload="metadata" src="${escapeHTML(href)}"></audio></div>`);return token(`<a class="markdown-link" href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer">${label}</a>`)});s=s.replace(/`([^`]+)`/g,(_,x)=>token(`<code>${x}</code>`));s=s.replace(/\*\*([^*\n]+?)\*\*/g,"<strong>$1</strong>");s=s.replace(/__([^_\n]+?)__/g,"<strong>$1</strong>");s=s.replace(/\*([^*\n]+?)\*/g,"<em>$1</em>");s=s.replace(/_([^_\n]+?)_/g,"<em>$1</em>");return s.replace(/@@JIHIKI(\d+)@@/g,(_,i)=>tokens[Number(i)])}
+    function inlineMD(text,base){let s=escapeHTML(text),tokens=[];const token=x=>{const id=`@@JIHIKI${tokens.length}@@`;tokens.push(x);return id};s=s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,(_,alt,p)=>token(`<img class="markdown-image" src="${escapeHTML(safeURL(p,base))}" alt="${escapeHTML(alt)}">`));s=s.replace(/\[([^\]]+)\]\(([^)]+)\)/g,(_,label,p)=>{const href=safeURL(p,base),lower=p.split("?")[0].toLowerCase();if(/\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(lower))return token(`<div class="markdown-audio"><div class="markdown-audio-label">${label}</div><audio controls preload="metadata" src="${escapeHTML(href)}"></audio></div>`);return token(`<a class="markdown-link" href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer">${label}</a>`)});s=s.replace(/`([^`]+)`/g,(_,x)=>token(`<code>${x}</code>`));s=s.replace(/\*\*([^*\n]+?)\*\*/g,"<strong>$1</strong>");s=s.replace(/__([^_\n]+?)__/g,"<strong>$1</strong>");s=s.replace(/\*([^*\n]+?)\*/g,"<em>$1</em>");s=s.replace(/_([^_\n]+?)_/g,"<em>$1</em>");return s.replace(/@@JIHANKI(\d+)@@/g,(_,i)=>tokens[Number(i)])}
     function markdownToHTML(markdown,base){const lines=String(markdown).replace(/\r\n?/g,"\n").split("\n");let html="",paragraph=[],list=null;const flush=()=>{if(paragraph.length){html+=`<p>${inlineMD(paragraph.join(" "),base)}</p>`;paragraph=[]}};const close=()=>{if(list)html+=`</${list}>`;list=null};for(const raw of lines){const line=raw.trim();if(!line){flush();close();continue}if(/^---+$/.test(line)){flush();close();html+="<hr>";continue}const h=line.match(/^(#{1,6})\s+(.*)$/);if(h){flush();close();const n=h[1].length;html+=`<h${n}>${inlineMD(h[2],base)}</h${n}>`;continue}const u=line.match(/^[-*+]\s+(.*)$/);if(u){flush();if(list!=="ul"){close();html+="<ul>";list="ul"}html+=`<li>${inlineMD(u[1],base)}</li>`;continue}const o=line.match(/^\d+\.\s+(.*)$/);if(o){flush();if(list!=="ol"){close();html+="<ol>";list="ol"}html+=`<li>${inlineMD(o[1],base)}</li>`;continue}close();paragraph.push(line)}flush();close();return html}
     function bindAudio(){document.querySelectorAll("#artifact-body audio").forEach(a=>{a.addEventListener("play",()=>{foreground=a;muteAmbient(true)});a.addEventListener("pause",()=>{if(foreground===a)muteAmbient(false)});a.addEventListener("ended",()=>{if(foreground===a){foreground=null;muteAmbient(false)}})})}
     async function openMarkdown(item,body){try{const r=await fetch(item.file,{cache:"no-cache"});if(!r.ok)throw new Error(`HTTP ${r.status}`);const md=await r.text(),doc=new URL(item.file,location.href),base=new URL("./",doc).href;body.innerHTML=`<div class="artifact-text markdown-rendered">${markdownToHTML(md,base)}</div>`;bindAudio()}catch(e){body.innerHTML=`<div class="artifact-text"><strong>MEMORY COULD NOT BE READ.</strong><br><br>${escapeHTML(item.file)}<br>${escapeHTML(e.message)}</div>`}}
