@@ -2,6 +2,12 @@
 
 **2026 / ELI / SONIC PI**
 
+[OPEN FULL AOKIGAHARA DOSSIER →](../../projects/aokigahara/index.html)
+
+The full interactive dossier is isolated from the JIHANKI runtime. It contains the project architecture, five environments, shared-state model, memory model, dissolution model, compositional principles and public renders.
+
+The Markdown archive remains the stable text version used by JIHANKI, while the dossier page provides the richer project presentation.
+
 ## PROJECT STATEMENT
 
 AOKIGAHARA is a procedural ambient sound system imagining the forest around Mount Fuji as a living memory.
