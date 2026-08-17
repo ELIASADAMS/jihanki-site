@@ -24,27 +24,71 @@ const DAILY_NOTES = [
   file: `documents/notes/daily/${date}.md`,
 }));
 
+const VIDEO_ARCHIVE = [
+  {
+    id: "fuji-six-yokai-video",
+    title: "富士山六大妖怪",
+    date: "2026",
+    type: "video",
+    category: "video",
+    author: "eli",
+    file: "media/video/富士山六大妖怪　(saikoneon　動画).mp4",
+    description: "A fictional yokai-documentary work presenting six invented beings associated with Mount Fuji, made as an homage to Japanese yokai folklore and ghost-story television.",
+  },
+  {
+    id: "mountain-remembers-mv",
+    title: "山は覚えている｜The Mountain Remembers｜MV",
+    date: "2026",
+    type: "video",
+    category: "video",
+    author: "eli",
+    file: "media/video/山は覚えている｜The Mountain Remembers｜MV.mp4",
+    description: "A fragmentary audiovisual memory of the Fuji region: roads, forests, shrines, tunnels, lakes, vending machines, field recordings, and traces of people. The journey is treated as memory rather than a conventional travel diary.",
+  },
+  {
+    id: "gonshan",
+    title: "GONSHAN — 彼岸花 / Higanbana",
+    date: "2026",
+    type: "video",
+    category: "video",
+    author: "takismana",
+    file: "media/video/Gonshan.mp4",
+    description: "Experimental visual music inspired by Kitahara Hakushu's Higanbana, combining the In-sen pentatonic scale, UTAU vocals, and digital collage imagery around frozen time and cyclical loss.",
+  },
+  {
+    id: "tunnel",
+    title: "TUNNEL — UNO-MISAKI",
+    date: "2026",
+    type: "video",
+    category: "video",
+    author: "takismana",
+    file: "media/video/Tunnel.mp4",
+    description: "An audiovisual exploration of the Uno-Misaki Tunnel as a fictional recording device whose walls preserve footsteps, coins, engines, bicycles and layers of time.",
+  },
+  {
+    id: "hotaru",
+    title: "HOTARU",
+    date: "2026",
+    type: "video",
+    category: "video",
+    author: "takismana",
+    file: "media/video/Hotaru.mp4",
+    description: "A twilight river journey in which fireflies become voices from the other side, combining Japanese ideas of mono no aware with liminal-space aesthetics and experimental UTAU sound.",
+  },
+  {
+    id: "shiki",
+    title: "SHIKI",
+    date: "2026",
+    type: "video",
+    category: "video",
+    author: "takismana",
+    file: "media/video/Shiki.mp4",
+    description: "A Takismana audiovisual work currently archived with the video materials; the repository README identifies it as the sixth work in the current video context.",
+  },
+];
+
 const ARCHIVE = {
-videos: [
-    {
-        id: "fuji-six-yokai-video",
-        title: "富士山六大妖怪",
-        date: "2026",
-        type: "video",
-        category: "video",
-        author: "eli",
-        file: "media/video/富士山六大妖怪　(saikoneon　動画).mp4"
-    },
-    {
-        id: "mountain-remembers-mv",
-        title: "山は覚えている｜The Mountain Remembers｜MV",
-        date: "2026",
-        type: "video",
-        category: "video",
-        author: "eli",
-        file: "media/video/山は覚えている｜The Mountain Remembers｜MV.mp4"
-    }
-],
+  videos: VIDEO_ARCHIVE,
   photos: [
     {
       id: "cover1",
@@ -161,6 +205,7 @@ videos: [
 const JIHANKI_ARCHIVE = Object.values(ARCHIVE).flat();
 window.ARCHIVE = ARCHIVE;
 window.JIHANKI_ARCHIVE = JIHANKI_ARCHIVE;
+window.VIDEO_ARCHIVE = VIDEO_ARCHIVE;
 
 const archiveStyle = document.createElement("style");
 archiveStyle.textContent = `
@@ -286,25 +331,19 @@ document.head.appendChild(archiveStyle);
     let s = escapeHTML(text),
       tokens = [];
     const token = (x) => {
-      const id = `@@JIHIKI${tokens.length}@@`;
+      const id = `@@JIHANKI${tokens.length}@@`;
       tokens.push(x);
       return id;
     };
     s = s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, p) =>
-      token(
-        `<img class="markdown-image" src="${escapeHTML(safeURL(p, base))}" alt="${escapeHTML(alt)}">`,
-      ),
+      token(`<img class="markdown-image" src="${escapeHTML(safeURL(p, base))}" alt="${escapeHTML(alt)}">`),
     );
     s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, p) => {
       const href = safeURL(p, base),
         lower = p.split("?")[0].toLowerCase();
       if (/\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(lower))
-        return token(
-          `<div class="markdown-audio"><div class="markdown-audio-label">${label}</div><audio controls preload="metadata" src="${escapeHTML(href)}"></audio></div>`,
-        );
-      return token(
-        `<a class="markdown-link" href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer">${label}</a>`,
-      );
+        return token(`<div class="markdown-audio"><div class="markdown-audio-label">${label}</div><audio controls preload="metadata" src="${escapeHTML(href)}"></audio></div>`);
+      return token(`<a class="markdown-link" href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer">${label}</a>`);
     });
     s = s.replace(/`([^`]+)`/g, (_, x) => token(`<code>${x}</code>`));
     s = s.replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");
@@ -315,93 +354,40 @@ document.head.appendChild(archiveStyle);
   }
   function markdownToHTML(markdown, base) {
     const lines = String(markdown).replace(/\r\n?/g, "\n").split("\n");
-    let html = "",
-      paragraph = [],
-      list = null;
+    let html = "", paragraph = [], list = null;
     const flush = () => {
       if (paragraph.length) {
         html += `<p>${inlineMD(paragraph.join(" "), base)}</p>`;
         paragraph = [];
       }
     };
-    const close = () => {
-      if (list) html += `</${list}>`;
-      list = null;
-    };
+    const close = () => { if (list) html += `</${list}>`; list = null; };
     for (const raw of lines) {
       const line = raw.trim();
-      if (!line) {
-        flush();
-        close();
-        continue;
-      }
-      if (/^---+$/.test(line)) {
-        flush();
-        close();
-        html += "<hr>";
-        continue;
-      }
+      if (!line) { flush(); close(); continue; }
+      if (/^---+$/.test(line)) { flush(); close(); html += "<hr>"; continue; }
       const h = line.match(/^(#{1,6})\s+(.*)$/);
-      if (h) {
-        flush();
-        close();
-        const n = h[1].length;
-        html += `<h${n}>${inlineMD(h[2], base)}</h${n}>`;
-        continue;
-      }
+      if (h) { flush(); close(); const n = h[1].length; html += `<h${n}>${inlineMD(h[2], base)}</h${n}>`; continue; }
       const u = line.match(/^[-*+]\s+(.*)$/);
-      if (u) {
-        flush();
-        if (list !== "ul") {
-          close();
-          html += "<ul>";
-          list = "ul";
-        }
-        html += `<li>${inlineMD(u[1], base)}</li>`;
-        continue;
-      }
+      if (u) { flush(); if (list !== "ul") { close(); html += "<ul>"; list = "ul"; } html += `<li>${inlineMD(u[1], base)}</li>`; continue; }
       const o = line.match(/^\d+\.\s+(.*)$/);
-      if (o) {
-        flush();
-        if (list !== "ol") {
-          close();
-          html += "<ol>";
-          list = "ol";
-        }
-        html += `<li>${inlineMD(o[1], base)}</li>`;
-        continue;
-      }
-      close();
-      paragraph.push(line);
+      if (o) { flush(); if (list !== "ol") { close(); html += "<ol>"; list = "ol"; } html += `<li>${inlineMD(o[1], base)}</li>`; continue; }
+      close(); paragraph.push(line);
     }
-    flush();
-    close();
-    return html;
+    flush(); close(); return html;
   }
   function bindAudio() {
     document.querySelectorAll("#artifact-body audio").forEach((a) => {
-      a.addEventListener("play", () => {
-        foreground = a;
-        muteAmbient(true);
-      });
-      a.addEventListener("pause", () => {
-        if (foreground === a) muteAmbient(false);
-      });
-      a.addEventListener("ended", () => {
-        if (foreground === a) {
-          foreground = null;
-          muteAmbient(false);
-        }
-      });
+      a.addEventListener("play", () => { foreground = a; muteAmbient(true); });
+      a.addEventListener("pause", () => { if (foreground === a) muteAmbient(false); });
+      a.addEventListener("ended", () => { if (foreground === a) { foreground = null; muteAmbient(false); } });
     });
   }
   async function openMarkdown(item, body) {
     try {
       const r = await fetch(item.file, { cache: "no-cache" });
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      const md = await r.text(),
-        doc = new URL(item.file, location.href),
-        base = new URL("./", doc).href;
+      const md = await r.text(), doc = new URL(item.file, location.href), base = new URL("./", doc).href;
       body.innerHTML = `<div class="artifact-text markdown-rendered">${markdownToHTML(md, base)}</div>`;
       bindAudio();
     } catch (e) {
@@ -410,78 +396,42 @@ document.head.appendChild(archiveStyle);
   }
   window.openItem = async function (item) {
     if (!item) return;
-    sfx("button");
-    stopForeground();
-    startLoop();
-    if (item.projectPath) {
-      window.location.href = item.projectPath;
-      return;
-    }
-    const artifact = document.getElementById("artifact"),
-      content = document.getElementById("artifact-content");
+    sfx("button"); stopForeground(); startLoop();
+    if (item.projectPath) { window.location.href = item.projectPath; return; }
+    const artifact = document.getElementById("artifact"), content = document.getElementById("artifact-content");
     if (!artifact || !content) return;
-    const title = escapeHTML(item.title || "UNTITLED"),
-      meta = [item.author, item.date, item.category || item.type]
-        .filter(Boolean)
-        .map(escapeHTML)
-        .join(" / ");
+    const title = escapeHTML(item.title || "UNTITLED"), meta = [item.author, item.date, item.category || item.type].filter(Boolean).map(escapeHTML).join(" / ");
     content.innerHTML = `<h1 class="artifact-title">${title}</h1><div class="artifact-meta">${meta}</div><div id="artifact-body">LOADING MEMORY...</div>`;
-    artifact.classList.add("open");
-    artifact.setAttribute("aria-hidden", "false");
-    const body = document.getElementById("artifact-body"),
-      type = String(item.type || item.category || "").toLowerCase(),
-      file = item.file || "",
-      ext = file.split("?")[0].split(".").pop().toLowerCase();
-    if (
-      type === "image" ||
-      type === "photo" ||
-      /^(png|jpe?g|webp|gif)$/.test(ext)
-    ) {
-      body.innerHTML = `<img class="artifact-media" src="${escapeHTML(file)}" alt="${title}">`;
-      return;
-    }
-    if (
-      type === "audio" ||
-      type === "music" ||
-      type === "sound" ||
-      /^(mp3|wav|ogg|m4a|aac|flac)$/.test(ext)
-    ) {
-      body.innerHTML = `<audio class="artifact-audio" controls autoplay playsinline src="${escapeHTML(file)}"></audio>`;
-      foreground = body.querySelector("audio");
-      muteAmbient(true);
-      foreground.addEventListener("play", () => muteAmbient(true));
-      foreground.addEventListener("pause", () => muteAmbient(false));
-      foreground.addEventListener("ended", () => {
-        foreground = null;
-        muteAmbient(false);
-      });
-      return;
-    }
-    if (type === "video" || /^(mp4|webm|mov)$/.test(ext)) {
-      body.innerHTML = `<video class="artifact-video" controls autoplay playsinline src="${escapeHTML(file)}"></video>`;
-      foreground = body.querySelector("video");
-      muteAmbient(true);
-      foreground.addEventListener("play", () => muteAmbient(true));
-      foreground.addEventListener("pause", () => muteAmbient(false));
-      foreground.addEventListener("ended", () => {
-        foreground = null;
-        muteAmbient(false);
-      });
-      return;
-    }
+    artifact.classList.add("open"); artifact.setAttribute("aria-hidden", "false");
+    const body = document.getElementById("artifact-body"), type = String(item.type || item.category || "").toLowerCase(), file = item.file || "", ext = file.split("?")[0].split(".").pop().toLowerCase();
+    if (type === "image" || type === "photo" || /^(png|jpe?g|webp|gif)$/.test(ext)) { body.innerHTML = `<img class="artifact-media" src="${escapeHTML(file)}" alt="${title}">`; return; }
+    if (type === "audio" || type === "music" || type === "sound" || /^(mp3|wav|ogg|m4a|aac|flac)$/.test(ext)) { body.innerHTML = `<audio class="artifact-audio" controls autoplay playsinline src="${escapeHTML(file)}"></audio>`; foreground = body.querySelector("audio"); muteAmbient(true); foreground.addEventListener("play", () => muteAmbient(true)); foreground.addEventListener("pause", () => muteAmbient(false)); foreground.addEventListener("ended", () => { foreground = null; muteAmbient(false); }); return; }
+    if (type === "video" || /^(mp4|webm|mov)$/.test(ext)) { body.innerHTML = `<video class="artifact-video" controls autoplay playsinline src="${escapeHTML(file)}"></video>`; foreground = body.querySelector("video"); muteAmbient(true); foreground.addEventListener("play", () => muteAmbient(true)); foreground.addEventListener("pause", () => muteAmbient(false)); foreground.addEventListener("ended", () => { foreground = null; muteAmbient(false); }); return; }
     await openMarkdown(item, body);
   };
-  document.addEventListener(
-    "pointerdown",
-    (e) => {
-      startLoop();
-      const b = e.target.closest && e.target.closest("button");
-      if (!b) return;
-      if (b.id === "coin-button") sfx("coin");
-      else if (b.id === "home-button") sfx("home");
-      else sfx("button");
-    },
-    { passive: true },
-  );
+  document.addEventListener("pointerdown", (e) => { startLoop(); const b = e.target.closest && e.target.closest("button"); if (!b) return; if (b.id === "coin-button") sfx("coin"); else if (b.id === "home-button") sfx("home"); else sfx("button"); }, { passive: true });
   document.addEventListener("keydown", () => startLoop(), { passive: true });
+  window.JIHANKI_AUDIO = { start: startLoop, duck: muteAmbient, sfx };
+})();
+
+(function(){
+  function init(){
+    const screen=document.getElementById("screen-content"),artifact=document.getElementById("artifact"),content=document.getElementById("artifact-content");
+    if(!screen||!artifact||!content)return;
+    artifact.classList.remove("open"); artifact.setAttribute("aria-hidden","true"); content.innerHTML="";
+    const items=()=>window.JIHANKI_ARCHIVE||[];
+    const categoryItems=cat=>items().filter(item=>{const c=String(item.category||item.type||"").toLowerCase();if(cat==="note")return c==="note"||c==="notes";if(cat==="yokai")return c==="yokai"||c==="妖怪";if(cat==="text")return c==="text"||c==="document";if(cat==="video")return c==="video";if(cat==="other")return !["video","photo","image","note","notes","yokai","妖怪","music","audio","sound","text","document","project"].includes(c);return c===cat});
+    const showHome=()=>{screen.innerHTML=`<div class="boot"><div class="boot-japanese">自販機</div><div class="boot-title">JIHANKI</div><div class="boot-subtitle">MEMORY ARCHIVE</div><div class="boot-loading">SELECT A MEMORY</div></div>`};
+    const showCategory=cat=>{const list=categoryItems(cat),title=cat==="yokai"?"妖怪":cat.toUpperCase();screen.innerHTML=`<div class="archive"><div class="archive-header"><span class="archive-title">${escapeHTML(title)}</span><span class="archive-status">${list.length} ITEMS</span></div>${list.length?list.map((item,i)=>`<button class="archive-item" data-archive-id="${escapeHTML(item.id||"")}" type="button"><span>${String(i+1).padStart(2,"0")}&nbsp;&nbsp;${escapeHTML(item.title||"UNTITLED")}</span>${item.date?`<small>${escapeHTML(item.date)}</small>`:""}${item.description?`<div class="archive-description">${escapeHTML(item.description)}</div>`:""}</button>`).join(""):`<div class="archive-item">NO MEMORY RECORDED</div>`}</div>`};
+    document.querySelectorAll(".product,#coin-button,#home-button,#memory-button,#artifact-close").forEach(old=>old.replaceWith(old.cloneNode(true)));
+    document.querySelectorAll(".product").forEach(button=>button.addEventListener("click",()=>{window.JIHANKI_AUDIO?.start();window.JIHANKI_AUDIO?.sfx("button");showCategory(button.dataset.category)}));
+    document.getElementById("coin-button")?.addEventListener("click",()=>{window.JIHANKI_AUDIO?.start();window.JIHANKI_AUDIO?.sfx("coin");screen.innerHTML=`<div class="boot"><div class="boot-title">COIN ACCEPTED</div><div class="boot-subtitle">MEMORY ACCESS ENABLED</div><div class="boot-loading">SELECT A MEMORY</div></div>`});
+    document.getElementById("home-button")?.addEventListener("click",()=>{window.JIHANKI_AUDIO?.start();window.JIHANKI_AUDIO?.sfx("home");showHome()});
+    document.getElementById("memory-button")?.addEventListener("click",()=>{window.JIHANKI_AUDIO?.start();window.JIHANKI_AUDIO?.sfx("button");const list=items();if(list.length)window.openItem(list[list.length-1])});
+    document.getElementById("artifact-close")?.addEventListener("click",()=>{artifact.classList.remove("open");artifact.setAttribute("aria-hidden","true");content.querySelectorAll("audio,video").forEach(m=>{try{m.pause()}catch(_) {}});window.JIHANKI_AUDIO?.duck(false);content.innerHTML=""});
+    artifact.addEventListener("click",e=>{if(e.target===artifact)document.getElementById("artifact-close")?.click()});
+    screen.addEventListener("click",e=>{const b=e.target.closest(".archive-item[data-archive-id]");if(!b)return;const item=items().find(x=>String(x.id)===String(b.dataset.archiveId));if(item)window.openItem(item)});
+    showHome();
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
