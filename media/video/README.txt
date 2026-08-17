@@ -78,41 +78,39 @@
 ※本動画に登場する妖怪・伝承・文献は創作です。
 実在する民間伝承や歴史資料ではありません。
 
-#saikoneon #yokai #experimental #liminalspaces #videoart #UTAU
 
+3. “GONSHAN” — Visual Music Inspired by the Poetry of Kitahara Hakushu
 
-3. «GONSHAN» — Визуальная музыка, рождённая из поэзии Китахары Хакусю
+This work is an experimental music video based on the famous poem “Higanbana” (lyrics by Kitahara Hakushu, from the collection *Memories*, 1911).
 
-Эта работа представляет собой экспериментальный визуальный клип, основанный на знаменитой песне «Хиганбана» (стихи: Китахара Хакусю, сборник «Воспоминания», 1911).
+The music is based on the traditional Japanese pentatonic scale known as In-sen (陰旋法), which creates a unique atmosphere that is both eerie and nostalgic. The vocals were performed using the UTAU voice banks “Takismana (タキスマナ)” and “Eugene (友人),” which strike a balance between digital and organic sounds.
 
-Музыка построена на традиционном японском пентатоническом ладе Ин-Сэн (陰旋法), создающем уникальную, жутковатую и одновременно ностальгическую атмосферу. Вокал исполнен с помощью голосовых банков UTAU «Такисмана  (タキスマナ)» и «Eugene (友人)», балансирующих между цифровым и органическим звучанием.
+The visuals are created using the digital collage technique: fragments of old newspapers, footprints, and images of crimson higanbana (spider lilies) are layered on top of one another, creating the sensation of piecing together scattered fragments of memory.
 
-Визуальный ряд выполнен в технике цифрового коллажа: фрагменты старых газет, следы ног и образы алых цветов хиганбаны (паучьей лилии) наслаиваются друг на друга, создавая ощущение собирания разрозненных осколков памяти.
-
-Ключевая тема работы — «остановленное время и циклическая утрата». Отец, скорбящий о дочери, умершей в возрасте семи лет, каждый день приходит на могилу и срывает красные цветы. Дух дочери становится голосом цветов — ловушкой, заманивающей отца в мир мёртвых. Но отцу не дано даже умереть — он обречён на бесконечное утро и вечный ритуал.
+The key theme of the work is “frozen time and cyclical loss.” A father, mourning his daughter who died at the age of seven, visits her grave every day and picks the red flowers. The daughter’s spirit becomes the voice of the flowers—a trap luring the father into the world of the dead. But the father is not even allowed to die—he is doomed to an endless morning and an eternal ritual.
 
 4. Tunnel
 
-Горы Яманаси. Тоннель Уно-Мисаки — это гигантский магнитофон.
+The Yamanashi Mountains. The Uno-Misaki Tunnel is a giant tape recorder.
 
-Это аудиовизуальное исследование памяти стен. Слюда в бетоне поглощает вибрации десятилетий: шаги из 80-х, звон монет на пункте оплаты и скрежет велосипеда курьера из 2005-го.
+This is an audiovisual exploration of the memory of walls. The mica in the concrete absorbs the vibrations of decades: footsteps from the ’80s, the jingle of coins at a toll booth, and the screech of a courier’s bicycle from 2005.
 
-Внутри этого пространства разворачивается экспериментальный танец — попытка взаимодействия с наслоениями времени. Если вы видите, что фигура в кадре двоится, — это не спецэффект, а проступающие архивы прошлого.
+Inside this space, an experimental dance unfolds—an attempt to interact with the layers of time. If you see the figure in the frame doubling, it’s not a special effect, but the archives of the past coming to the surface.
 
-Слышите щелчок фотоаппарата? Значит, тоннель начал снимать вас. Он — художник, и он хочет, чтобы его заметили. Но будьте осторожны: не наступайте на белую линию разметки.
+Do you hear the click of a camera? That means the tunnel has started photographing you. It’s an artist, and it wants to be noticed. But be careful: don’t step on the white line on the ground.
 
-Звуковая дорожка: Трекерная музыка, интегрированная с полевыми записями, сделанными внутри тоннеля.
+Soundtrack: Tracker music integrated with field recordings made inside the tunnel.
 
 5. Hotaru
-Эта песня — путешествие вдоль реки в сумерках, где светлячки не просто огоньки, а голоса с другой стороны. Каждый куплет — одно воплощение их света согласно японским легендам: эхо древних клинков, платоническая любовь, горящая без прикосновений, безмолвная игра нерождённых душ. Один и тот же вопрос звучит сквозь все ночи: «Ты ли это?»
+This song is a journey along a river at twilight, where fireflies are not merely lights, but voices from the other side. Each verse is a manifestation of their light according to Japanese legends: the echo of ancient blades, platonic love burning without touch, the silent play of unborn souls. The same question echoes through every night: “Is that you?”
 
-В японской эстетике светлячок (хотару) — символ моно-но аварэ, горьковато-сладостной красоты непостоянства. Эта песня — наше посвящение тому мимолётному сиянию.
+In Japanese aesthetics, the firefly (hotaru) is a symbol of mono no aware—the bittersweet beauty of impermanence. This song is our tribute to that fleeting radiance.
 
-Hotaru — концептуальное аудиовизуальное исследование, объединяющее эстетику лиминальных пространств и экспериментальное звучание VocalSynth (UTAU).
+Hotaru is a conceptual audiovisual exploration that combines the aesthetics of liminal spaces with the experimental sounds of VocalSynth (UTAU).
 
-Музыка и слова: Takismana (Юлия Баранюк)
-Видео: Takismana (Юлия Баранюк) — танец, монтаж
-Варвара Андреева — оператор
+Music and lyrics: Takismana (Yulia Baranyuk)
+Video: Takismana (Yulia Baranyuk)—dance, editing
+Varvara Andreeva—cinematographer
 
 6. Shiki
 
