@@ -94,4 +94,46 @@
   if (document.readyState === "loading")
     document.addEventListener("DOMContentLoaded", enhance, { once: true });
   else enhance();
+
+  // Archive maintenance layer. The main archive remains the source of the
+  // existing runtime; this keeps the chapter index current without duplicating
+  // standalone notes that are already represented by their daily chapters.
+  const chapterAdditions = [
+    { id:"daily-2026-07-27", title:"MANYŌ / MOUNTAIN ASCENT", date:"2026-07-27", type:"text", category:"note", author:"archive", project:"japan-expedition", file:"documents/notes/daily/2026-07-27.md" },
+    { id:"daily-2026-07-28", title:"TOKYO / ACCEPTED & REJECTED PLACES", date:"2026-07-28", type:"text", category:"note", author:"archive", project:"japan-expedition", file:"documents/notes/daily/2026-07-28.md" },
+  ];
+
+  function maintainArchive() {
+    if (!Array.isArray(window.JIHANKI_ARCHIVE)) return;
+    const archive = window.JIHANKI_ARCHIVE;
+
+    // These were supplemental notes for 2026-07-22. The daily chapter now
+    // already contains their material, so showing both creates duplicate entries.
+    const duplicateIds = new Set(["first-jihanki", "expedition-0722"]);
+    for (let i = archive.length - 1; i >= 0; i--) {
+      if (duplicateIds.has(archive[i]?.id)) archive.splice(i, 1);
+    }
+
+    // Keep the daily chapter label aligned with the actual chapter file.
+    const july26 = archive.find((item) => item.id === "daily-2026-07-26");
+    if (july26) july26.title = "TOYS / RITUALS / SHRINES";
+
+    for (const chapter of chapterAdditions) {
+      if (!archive.some((item) => item.id === chapter.id)) archive.push(chapter);
+    }
+
+    // Keep the category views chronological for the expedition notes.
+    archive.sort((a, b) => {
+      const ad = String(a?.date || "");
+      const bd = String(b?.date || "");
+      if (ad !== bd) return ad.localeCompare(bd);
+      return String(a?.id || "").localeCompare(String(b?.id || ""));
+    });
+    if (window.ARCHIVE?.notes) {
+      window.ARCHIVE.notes = archive.filter((item) => item.category === "note");
+    }
+    window.JIHANKI_ARCHIVE = archive;
+  }
+
+  maintainArchive();
 })();
