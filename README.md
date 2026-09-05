@@ -6,6 +6,33 @@ It combines an experimental physical-machine UI with an archive of texts, sounds
 
 The site is intentionally built as a lightweight static web application: no framework, no build step, and no backend are required.
 
+## Origin — SAIKONEON / Lake Saiko
+
+JIHANKI began at **SAIKONEON**, an artist-in-residence on the shore of Lake Saiko in Yamanashi, Japan, during the July 2026 Japan stay of **Ilya Minin (Eli) and Julia Baranyuk**.
+
+The project grew out of nighttime walks, field observation, and encounters with ordinary infrastructure around Saiko. The first JIHANKI encounter was a vending machine seen at night near SAIKONEON. In the darkness, the machine stopped feeling like a simple commercial device and began to read as an isolated illuminated object — a small interface between a person and an otherwise quiet landscape.
+
+That observation became the conceptual seed of the archive. The physical vending machines encountered around Saiko became a model for the website itself: instead of accepting money and returning a drink or snack, the digital machine accepts interaction and returns a fragment of memory.
+
+The project therefore grew directly from the place and the journey rather than being designed as a generic archive independently of them.
+
+SAIKONEON describes itself as a space for research, creation, collaboration, and exchange between creators from different fields, situated in the natural environment around Lake Saiko and Mount Fuji. The JIHANKI project belongs to that particular environment: lake, forest, roads, tunnels, small settlements, shrines, and isolated infrastructure all became part of the archive's source material.
+
+Official residency site: https://saikoneon.com/
+
+The original field note is preserved in:
+
+```text
+documents/notes/first-jihanki.md
+```
+
+## Credits
+
+**JIHANKI — Interactive Archive**  
+Concept, archive, interface, documentation and development: **Ilya Minin (Eli)**  
+Origin / field experience: **SAIKONEON, Lake Saiko, Japan**  
+Japan stay / shared field experience: **Julia Baranyuk**
+
 ## Features
 
 * Interactive vending-machine interface
@@ -162,6 +189,7 @@ The catalogue entry provides the metadata; the Markdown file remains the actual 
 
 The repository currently contains material related to:
 
+* The SAIKONEON / Lake Saiko origin of the JIHANKI project
 * The first JIHANKI encounter
 * The July 2026 Japan expedition
 * Archive rotation / catalogue behaviour
